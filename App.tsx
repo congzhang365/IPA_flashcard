@@ -469,7 +469,7 @@ const App: React.FC = () => {
 
             <div className="w-full bg-slate-50 p-6 rounded-3xl shadow-inner border border-slate-100 mb-8 opacity-40 select-none pointer-events-none">
               <div className="w-full h-12 flex items-center justify-center text-3xl font-bold text-slate-200 ipa-font italic">
-                θɪs ɪz fjuːtʃə
+                fjuːtʃə
               </div>
             </div>
 
