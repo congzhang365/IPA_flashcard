@@ -5,7 +5,7 @@ import { ipaDataset } from './data/ipaData';
 import { Flashcard } from './components/Flashcard';
 import { FoldedCard } from './components/FoldedCard';
 import { SettingsOverlay } from './components/SettingsOverlay';
-import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Pointer, CheckCircle2, Sliders, Construction, Download, Smartphone, Share, PlusSquare } from 'lucide-react';
+import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, CheckCircle2, Sliders, Construction, Smartphone, Share, PlusSquare, Eye } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
 const App: React.FC = () => {
@@ -34,6 +34,31 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'study' | 'lab' | 'tutorial'>('study');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'consonant' | 'vowel' | 'diacritic'>('all');
+  
+  const [installTab, setInstallTab] = useState<'ios' | 'android'>('ios');
+  const installTouchStart = useRef<number | null>(null);
+  const installTouchEnd = useRef<number | null>(null);
+
+  const onInstallTouchStart = (e: React.TouchEvent) => {
+    installTouchEnd.current = null;
+    installTouchStart.current = e.targetTouches[0].clientX;
+  };
+
+  const onInstallTouchMove = (e: React.TouchEvent) => {
+    installTouchEnd.current = e.targetTouches[0].clientX;
+  };
+
+  const onInstallTouchEnd = () => {
+    if (!installTouchStart.current || !installTouchEnd.current) return;
+    const distance = installTouchStart.current - installTouchEnd.current;
+    if (distance > 50) {
+      triggerHaptic('light');
+      setInstallTab('android');
+    } else if (distance < -50) {
+      triggerHaptic('light');
+      setInstallTab('ios');
+    }
+  };
   
   const touchStart = useRef<number | null>(null);
   const touchEnd = useRef<number | null>(null);
@@ -309,22 +334,21 @@ const App: React.FC = () => {
 
       {activeTab === 'study' && (
         <div className="w-full px-2 mb-4 animate-in fade-in slide-in-from-top-2 duration-300">
-          <div className="flex items-center justify-between mb-2 px-1">
-            <span className="text-xs font-black uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <span>🎯</span> FOCUS CATEGORY
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Focus Category
             </span>
-            <span className="text-[10px] bg-primary/10 text-primary font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+            <span className="text-[9px] bg-primary/10 text-primary font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
               {selectedCategory === 'all' ? 'All IPA' : selectedCategory + 's'}
             </span>
           </div>
-          <div className="bg-slate-100/60 p-1.5 rounded-2xl flex gap-1.5 shadow-inner border border-slate-200/30">
+          <div className="bg-slate-100 p-1 rounded-full flex gap-1 border border-slate-200/40 relative">
             {(['all', 'consonant', 'vowel', 'diacritic'] as const).map((cat) => {
               const isActive = selectedCategory === cat;
               let displayName = 'All';
-              let icon = '🌐';
-              if (cat === 'consonant') { displayName = 'Consonants'; icon = '💬'; }
-              if (cat === 'vowel') { displayName = 'Vowels'; icon = '🗣️'; }
-              if (cat === 'diacritic') { displayName = 'Diacritics'; icon = '✍️'; }
+              if (cat === 'consonant') displayName = 'Consonants';
+              if (cat === 'vowel') displayName = 'Vowels';
+              if (cat === 'diacritic') displayName = 'Diacritics';
               
               return (
                 <button
@@ -333,14 +357,13 @@ const App: React.FC = () => {
                     triggerHaptic('light');
                     setSelectedCategory(cat);
                   }}
-                  className={`flex-1 py-2 px-0.5 rounded-xl transition-all flex flex-col items-center gap-1 border ${
+                  className={`flex-1 py-2 rounded-full transition-all duration-300 text-[10px] font-bold uppercase tracking-wider relative ${
                     isActive
-                      ? 'bg-primary text-white border-primary shadow-md font-black scale-[1.03] z-10'
-                      : 'bg-white text-slate-500 border-slate-100 hover:text-slate-700 hover:bg-slate-50 shadow-sm'
+                      ? 'bg-primary text-white shadow-sm font-black scale-[1.02] z-10'
+                      : 'text-slate-400 hover:text-slate-600'
                   }`}
                 >
-                  <span className="text-sm sm:text-base">{icon}</span>
-                  <span className="tracking-tight text-[10px] font-black">{displayName}</span>
+                  {displayName}
                 </button>
               );
             })}
@@ -464,109 +487,188 @@ const App: React.FC = () => {
           </div>
         </main>
       ) : (
-        <main className="w-full flex-grow flex flex-col items-center justify-start py-8 gap-6 animate-in fade-in slide-in-from-right duration-300 overflow-y-auto pb-8 scrollbar-hide">
-          <div className="w-full flex items-center gap-4 mb-2 px-2">
-            <div className="bg-secondary/10 p-3 rounded-2xl">
-              <BookOpen className="w-6 h-6 text-secondary" />
+        <main className="w-full flex-grow flex flex-col items-center justify-start py-6 gap-5 animate-in fade-in slide-in-from-right duration-300 overflow-y-auto pb-8 scrollbar-hide">
+          <div className="w-full flex items-center gap-3 mb-1 px-2">
+            <div className="bg-secondary/10 p-2.5 rounded-2xl animate-pulse">
+              <BookOpen className="w-5 h-5 text-secondary" />
             </div>
-            <h2 className="text-2xl font-black text-slate-800 tracking-tight">HOW TO PLAY</h2>
+            <h2 className="text-xl font-bold text-slate-800 tracking-tight">How to Study</h2>
           </div>
 
-          {/* Device Specific Installation Guides */}
-          <div className="grid grid-cols-1 gap-4 w-full">
-            {/* iPhone Installation Guide */}
-            <section className="w-full bg-white p-6 rounded-[2rem] border-2 border-slate-50 shadow-xl shadow-slate-100 relative overflow-hidden group">
-              <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform duration-500">
-                <Smartphone className="w-32 h-32 text-slate-900" />
-              </div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-slate-900 p-2 rounded-lg">
-                  <Smartphone className="w-5 h-5 text-white" />
-                </div>
-                <h3 className="font-black text-lg text-slate-900 tracking-tight">Install on iPhone</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">1</div>
-                  <p className="text-xs text-slate-500 leading-relaxed">Open this page in <span className="text-slate-900 font-bold">Safari</span>.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">2</div>
-                  <p className="text-xs text-slate-500 leading-relaxed flex items-center gap-1.5">Tap the <Share className="w-3.5 h-3.5 text-blue-500" /> <span className="text-slate-900 font-bold">Share</span> button at the bottom.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-slate-100 text-slate-900 flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">3</div>
-                  <p className="text-xs text-slate-500 leading-relaxed flex items-center gap-1.5">Tap <PlusSquare className="w-3.5 h-3.5 text-slate-700" /> <span className="text-slate-900 font-bold uppercase tracking-widest text-[10px]">Add to Home Screen</span>.</p>
-                </div>
-              </div>
-            </section>
+          {/* Device Specific Swipeable Installation Guides */}
+          <div className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-4">
+            <div className="flex p-0.5 bg-slate-50 border border-slate-100 rounded-xl gap-1">
+              <button 
+                onClick={() => { triggerHaptic(); setInstallTab('ios'); }}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${installTab === 'ios' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-400'}`}
+              >
+                 iOS (iPhone)
+              </button>
+              <button 
+                onClick={() => { triggerHaptic(); setInstallTab('android'); }}
+                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${installTab === 'android' ? 'bg-white shadow-sm text-slate-800 font-bold' : 'text-slate-400'}`}
+              >
+                🤖 Android
+              </button>
+            </div>
 
-            {/* Android Installation Guide */}
-            <section className="w-full bg-slate-900 p-6 rounded-[2rem] border border-slate-800 shadow-xl shadow-slate-200 text-white overflow-hidden relative group">
-              <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
-                <Smartphone className="w-32 h-32" />
-              </div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="bg-primary p-2 rounded-lg">
-                  <Download className="w-5 h-5 text-white" />
+            <div 
+              onTouchStart={onInstallTouchStart}
+              onTouchMove={onInstallTouchMove}
+              onTouchEnd={onInstallTouchEnd}
+              className="relative overflow-hidden min-h-[145px] flex flex-col justify-center transition-all duration-300 px-1"
+            >
+              {installTab === 'ios' ? (
+                <div className="animate-in fade-in slide-in-from-right-4 duration-300 w-full">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="bg-slate-900 p-1.5 rounded-lg">
+                      <Smartphone className="w-4 h-4 text-white" />
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-800 tracking-tight">Add to Safari Homescreen</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">1</div>
+                      <p className="text-xs text-slate-500 leading-relaxed">Launch the app in your iPhone's <span className="text-slate-800 font-semibold">Safari</span> browser.</p>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">2</div>
+                      <p className="text-xs text-slate-500 leading-relaxed flex items-center gap-1 flex-wrap">Tap the blue <Share className="w-3.5 h-3.5 text-blue-500 inline" /> <span className="text-slate-800 font-semibold">Share</span> icon in the navigation bar.</p>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">3</div>
+                      <p className="text-xs text-slate-500 leading-relaxed flex items-center gap-1 flex-wrap">Choose <PlusSquare className="w-3.5 h-3.5 text-slate-700 inline" /> <span className="text-slate-800 font-semibold">Add to Home Screen</span> to run offline.</p>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="font-black text-lg tracking-tight">Install on Android</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">1</div>
-                  <p className="text-xs text-slate-300 leading-relaxed">Open this page in <span className="text-white font-bold underline decoration-primary">Chrome</span>.</p>
+              ) : (
+                <div className="animate-in fade-in slide-in-from-left-4 duration-300 w-full">
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className="bg-primary/25 p-1.5 rounded-lg">
+                      <Smartphone className="w-4 h-4 text-primary" />
+                    </div>
+                    <h3 className="font-bold text-sm text-slate-800 tracking-tight">Add to Android Chrome Homescreen</h3>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">1</div>
+                      <p className="text-xs text-slate-500 leading-relaxed">Launch the app using your Android's <span className="text-slate-800 font-semibold">Chrome</span> browser.</p>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">2</div>
+                      <p className="text-xs text-slate-500 leading-relaxed">Tap the <span className="text-slate-800 font-semibold">menu button (three stacked dots ⋮)</span>.</p>
+                    </div>
+                    <div className="flex items-start gap-2.5">
+                      <div className="w-4 h-4 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-bold flex-shrink-0 mt-0.5">3</div>
+                      <p className="text-xs text-slate-500 leading-relaxed">Select <span className="text-primary font-bold">Install app</span> or <span className="text-primary font-bold">Add to Home screen</span>.</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">2</div>
-                  <p className="text-xs text-slate-300 leading-relaxed">Tap the <span className="text-white font-bold">three dots (⋮)</span> menu.</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5 italic">3</div>
-                  <p className="text-xs text-slate-300 leading-relaxed"><span className="text-primary font-black uppercase tracking-widest text-[10px]">"Install app"</span> or <span className="text-primary font-black uppercase tracking-widest text-[10px]">"Add to Home screen"</span>.</p>
-                </div>
-              </div>
-            </section>
+              )}
+            </div>
+
+            {/* Slider Dots */}
+            <div className="flex justify-center gap-1.5">
+              <button 
+                onClick={() => { triggerHaptic(); setInstallTab('ios'); }} 
+                className={`w-1.5 h-1.5 rounded-full transition-all ${installTab === 'ios' ? 'w-4 bg-primary' : 'bg-slate-200'}`} 
+              />
+              <button 
+                onClick={() => { triggerHaptic(); setInstallTab('android'); }} 
+                className={`w-1.5 h-1.5 rounded-full transition-all ${installTab === 'android' ? 'w-4 bg-primary' : 'bg-slate-200'}`} 
+              />
+            </div>
           </div>
 
-          <div className="w-full h-[1px] bg-slate-100 my-2"></div>
-
-          {/* Feature Tutorials */}
-          <section className="w-full bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg shadow-slate-100">
-            <div className="flex items-center gap-3 mb-3">
-              <Sliders className="w-5 h-5 text-primary" />
-              <h3 className="font-bold text-slate-800">Customize Setup</h3>
+          {/* Active Features Info Card */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-primary/5 p-1.5 rounded-lg">
+                <Sliders className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Active Features & Layouts</h3>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Tap the <span className="text-primary font-bold">Gear Icon</span>. Choose between 
-              <span className="font-bold text-slate-700"> Flashcard</span> (flip) or 
-              <span className="font-bold text-slate-700"> Quiz</span> (fill blanks).
-            </p>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>
+                Configure card contents using the <span className="font-bold text-slate-700">Study Setup</span> gear icon:
+              </p>
+              <ul className="space-y-1.5 pl-1.5 border-l-2 border-primary/20">
+                <li>
+                  <span className="font-bold text-slate-700">• At Least 2 Selected:</span> You must toggle on at least 2 active features. When only two are selected, they cannot be deselected to prevent cards from breaking.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-700">• Exactly 2 = Classic Flip:</span> Cards act as standard double-sided flashcards. Tap anywhere on the card to flip between Prompt and Answer.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-700">• 3 or More = Multi-Tab Folds:</span> Cards become premium multi-perspective cards. Tap any of the sleek index tabs at the card base or swipe left/right to change perspective.
+                </li>
+              </ul>
+            </div>
           </section>
 
-          <section className="w-full bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg shadow-slate-100">
-            <div className="flex items-center gap-3 mb-3">
-              <Pointer className="w-5 h-5 text-secondary" />
-              <h3 className="font-bold text-slate-800">Flip & Fold</h3>
+          {/* Choosing Prompt & Answer */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-[#7CB5B8]/10 p-1.5 rounded-lg">
+                <Eye className="w-4 h-4 text-secondary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Question Flow Selection</h3>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              <span className="font-bold text-slate-700">Flashcard:</span> Tap anywhere to flip.
-              <br/>
-              <span className="font-bold text-slate-700">Folded Card:</span> When using 3+ features, tap to cycle through surfaces.
-            </p>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-1.5">
+              <p>
+                Define your exact prompt direction in the <span className="font-bold text-slate-700">Study Setup</span>:
+              </p>
+              <ul className="space-y-1 pl-1.5 border-l-2 border-secondary/20">
+                <li>
+                  • <span className="font-bold text-slate-700">Prompt:</span> Choose the face presented first (e.g., studying visually with the raw phonetic <span className="font-semibold">Symbol</span>).
+                </li>
+                <li>
+                  • <span className="font-bold text-slate-700">Answer:</span> Choose the final target verification item (e.g., reciting the correct phonetic description <span className="font-semibold">Label</span> or key <span className="font-semibold">Example</span> word). Audio playback is dedicated to output only.
+                </li>
+              </ul>
+            </div>
           </section>
 
-          <section className="w-full bg-white p-6 rounded-[2rem] border border-slate-100 shadow-lg shadow-slate-100">
-            <div className="flex items-center gap-3 mb-3">
-              <CheckCircle2 className="w-5 h-5 text-green-500" />
-              <h3 className="font-bold text-slate-800">Track Progress</h3>
+          {/* Mastery Progress Card */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-emerald-50 p-1.5 rounded-lg">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Grading & History Archive</h3>
             </div>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Mark mastery:
-              <br/>• <span className="text-green-600 font-bold">YES</span>: Mastered (hidden from queue).
-              <br/>• <span className="text-secondary font-bold">MAYBE</span>: Review later.
-              <br/>• <span className="text-red-500 font-bold">NO</span>: Shuffled back into session.
-            </p>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>Assess your phonetic memory on card review by selecting your feedback level:</p>
+              <div className="grid grid-cols-3 gap-2 text-center text-[10px] uppercase font-bold mt-1">
+                <div className="bg-emerald-50/70 border border-emerald-105 text-emerald-600 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>Yes</span>
+                  <span className="block text-[8px] font-normal lowercase text-emerald-500 mt-1">Archived From Deck</span>
+                </div>
+                <div className="bg-amber-50/70 border border-amber-105 text-amber-600 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>Maybe</span>
+                  <span className="block text-[8px] font-normal lowercase text-amber-500 mt-1">Kept in Deck</span>
+                </div>
+                <div className="bg-rose-50/70 border border-rose-105 text-rose-500 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>No</span>
+                  <span className="block text-[8px] font-normal lowercase text-rose-500 mt-1">Shuffled back</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Reset Progress Card */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-rose-50 p-1.5 rounded-lg">
+                <RotateCcw className="w-4 h-4 text-rose-400" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Resetting Progress</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed pr-1">
+              <p>
+                To restart your entire learning sessions, open the Study Setup options and choose <span className="font-bold text-rose-500">Reset Progress</span>. This clears your memory history, retrieves all mastered cards, and builds a fully shuffled new deck.
+              </p>
+            </div>
           </section>
         </main>
       )}
@@ -606,8 +708,6 @@ const App: React.FC = () => {
           onClose={() => setIsSettingsOpen(false)}
           onReset={resetAll}
           onInstall={deferredPrompt ? handleInstallClick : undefined}
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
         />
       )}
     </div>
