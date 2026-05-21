@@ -23,7 +23,7 @@ const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
       return <div className="ipa-font text-8xl font-bold text-slate-800">{data.symbol}</div>;
     case IPAFeature.LABEL:
       return <div className="text-2xl font-semibold text-slate-700 text-center px-4 leading-snug">{data.label}</div>;
-    case IPAFeature.WORDS:
+    case IPAFeature.EXAMPLES:
       return (
         <div className="flex flex-col items-center gap-2">
           <span className="text-sm uppercase tracking-widest text-slate-400 mb-2 font-bold">Examples</span>
@@ -32,7 +32,7 @@ const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
               <span key={i} className="text-xl font-medium text-slate-700 text-center px-4">{w}</span>
             ))
           ) : (
-            <span className="text-slate-400 italic text-sm">No examples available</span>
+            <span className="text-slate-400 italic text-xs text-center px-4">No examples (diacritic modifier)</span>
           )}
         </div>
       );
@@ -71,7 +71,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
           
           {isQuiz && !isFlipped && (
             <div className="w-full mt-4 flex flex-col items-center gap-4 animate-in fade-in slide-in-from-bottom-2" onClick={(e) => e.stopPropagation()}>
-              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Identify {maskedFeature}</h3>
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Identify {maskedFeature === IPAFeature.EXAMPLES ? 'examples' : maskedFeature}</h3>
               <form onSubmit={handleQuizSubmit} className="w-full flex flex-col gap-2">
                 <input
                   autoFocus
@@ -91,7 +91,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             </div>
           )}
 
-          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{promptFeature}</div>
+          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{promptFeature === IPAFeature.EXAMPLES ? 'E.g.' : promptFeature}</div>
         </div>
 
         {/* Back */}
@@ -139,7 +139,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             </div>
           )}
           
-          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{maskedFeature}</div>
+          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{maskedFeature === IPAFeature.EXAMPLES ? 'E.g.' : maskedFeature}</div>
         </div>
 
       </div>

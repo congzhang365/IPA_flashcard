@@ -20,7 +20,7 @@ const FeatureIcon: React.FC<{ feature: IPAFeature }> = ({ feature }) => {
   switch (feature) {
     case IPAFeature.SYMBOL: return <span className="text-lg font-bold">Ω</span>;
     case IPAFeature.LABEL: return <span className="text-lg font-bold">abc</span>;
-    case IPAFeature.WORDS: return <span className="text-lg font-bold">""</span>;
+    case IPAFeature.EXAMPLES: return <span className="text-lg font-bold">""</span>;
     case IPAFeature.SOUND: return <Volume2 className="w-5 h-5" />;
     default: return null;
   }
@@ -32,7 +32,7 @@ const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
       return <div className="ipa-font text-7xl font-bold text-slate-800">{data.symbol}</div>;
     case IPAFeature.LABEL:
       return <div className="text-xl font-semibold text-slate-700 text-center px-4 leading-relaxed">{data.label}</div>;
-    case IPAFeature.WORDS:
+    case IPAFeature.EXAMPLES:
       return (
         <div className="flex flex-wrap justify-center gap-3 px-4">
           {data.words && data.words.length > 0 ? (
@@ -40,7 +40,7 @@ const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
               <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-full text-slate-600 text-sm font-medium">{w}</span>
             ))
           ) : (
-            <span className="text-slate-400 italic text-sm">No examples available</span>
+            <span className="text-slate-400 italic text-xs">No examples (diacritic modifier)</span>
           )}
         </div>
       );
@@ -99,7 +99,7 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
       </div>
 
       <div className="flex flex-col items-center justify-center p-8 text-center w-full min-h-[300px]" key={activeSurface}>
-        <div className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 flex items-center gap-2">
+        <div className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 flex items-center gap-2 font-black">
           <FeatureIcon feature={features[activeSurface]} />
           {features[activeSurface]}
         </div>

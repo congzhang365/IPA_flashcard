@@ -3,7 +3,7 @@ export enum IPAFeature {
   SYMBOL = 'SYMBOL',
   LABEL = 'LABEL',
   SOUND = 'SOUND',
-  WORDS = 'WORDS'
+  EXAMPLES = 'EXAMPLES'
 }
 
 export enum LearningStatus {

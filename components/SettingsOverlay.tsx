@@ -125,7 +125,7 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
                         : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
                     }`}
                   >
-                    <span className="text-xs">{feature}</span>
+                    <span className="text-xs">{feature === IPAFeature.EXAMPLES ? 'EXAMPLES' : feature}</span>
                     {isActive && <Check className="w-3.5 h-3.5 text-primary" />}
                   </button>
                 );
@@ -149,7 +149,7 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
                         : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
                     }`}
                   >
-                    {f}
+                    {f === IPAFeature.EXAMPLES ? 'E.g.' : f}
                   </button>
                 ))}
               </div>
@@ -172,7 +172,7 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
                         : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
                     }`}
                   >
-                    {f}
+                    {f === IPAFeature.EXAMPLES ? 'E.g.' : f}
                   </button>
                 ))}
               </div>

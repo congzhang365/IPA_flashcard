@@ -8,6 +8,14 @@ import { SettingsOverlay } from './components/SettingsOverlay';
 import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, CheckCircle2, Sliders, Construction, Smartphone, Share, PlusSquare, Eye } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
+const IPAAppCredits: React.FC = () => (
+  <div className="mt-4 mb-1 text-center w-full">
+    <span className="text-[9px] font-semibold uppercase tracking-widest text-slate-400/85">
+      © 2026 <a href="https://congzhang-linguist.github.io/" target="_blank" rel="noopener noreferrer" style={{ color: '#00A5A9' }} className="hover:underline font-bold">Cong Zhang</a> @ Newcastle University
+    </span>
+  </div>
+);
+
 const App: React.FC = () => {
   const [settings, setSettings] = useState<AppSettings>({
     activeFeatures: [IPAFeature.SYMBOL, IPAFeature.LABEL],
@@ -260,7 +268,7 @@ const App: React.FC = () => {
       isCorrect = sanitizedInput === currentCard.symbol.toLowerCase();
     } else if (targetFeature === IPAFeature.LABEL) {
       isCorrect = currentCard.label.toLowerCase().includes(sanitizedInput);
-    } else if (targetFeature === IPAFeature.WORDS) {
+    } else if (targetFeature === IPAFeature.EXAMPLES) {
       isCorrect = currentCard.words ? currentCard.words.some(w => w.toLowerCase() === sanitizedInput) : false;
     }
 
@@ -449,8 +457,9 @@ const App: React.FC = () => {
               </button>
             </div>
           )}
+          <IPAAppCredits />
         </main>
-      ) : activeTab === 'lab' ? (
+       ) : activeTab === 'lab' ? (
         <main className="w-full flex-grow flex flex-col items-center justify-center py-8 gap-8 animate-in fade-in duration-300 px-4">
           <div className="bg-white p-10 rounded-[3rem] w-full border border-slate-100 shadow-2xl shadow-slate-200 flex flex-col items-center text-center relative overflow-hidden">
             {/* Maintenance/Coming Soon Banner */}
@@ -468,8 +477,8 @@ const App: React.FC = () => {
             </p>
 
             <div className="w-full bg-slate-50 p-6 rounded-3xl shadow-inner border border-slate-100 mb-8 opacity-40 select-none pointer-events-none">
-              <div className="w-full h-12 flex items-center justify-center text-3xl font-bold text-slate-200 ipa-font italic">
-                fjuːtʃə
+              <div className="w-full h-12 flex items-center justify-center text-2xl font-bold text-slate-200 ipa-font italic">
+                ðɪs ɪz ðə fjuːtʃə
               </div>
             </div>
 
@@ -485,6 +494,7 @@ const App: React.FC = () => {
               Check back for version 2.0
             </p>
           </div>
+          <IPAAppCredits />
         </main>
       ) : (
         <main className="w-full flex-grow flex flex-col items-center justify-start py-6 gap-5 animate-in fade-in slide-in-from-right duration-300 overflow-y-auto pb-8 scrollbar-hide">
@@ -670,6 +680,7 @@ const App: React.FC = () => {
               </p>
             </div>
           </section>
+          <IPAAppCredits />
         </main>
       )}
 
