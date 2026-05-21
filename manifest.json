@@ -1,0 +1,17 @@
+{
+  "name": "IPA Master Flashcards",
+  "short_name": "IPA Master",
+  "description": "Learn IPA symbols through customizable 3D flashcards.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fcfdfd",
+  "theme_color": "#7BB5B8",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3894/3894083.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

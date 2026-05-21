@@ -1,0 +1,10 @@
+{
+  "name": "IPA Master Flashcards",
+  "description": "An advanced IPA learning app featuring customizable flashcards, 3D multi-surface interactions, and AI-powered phonetic synthesis.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
