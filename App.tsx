@@ -330,7 +330,7 @@ const App: React.FC = () => {
           <div className="bg-primary p-2 rounded-xl text-white shadow-lg shadow-primary/20">
             <Layers className="w-5 h-5" />
           </div>
-          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA MASTER</h1>
+          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA Flashcard</h1>
         </div>
         <button 
           onClick={() => { triggerHaptic(); setIsSettingsOpen(true); }}
