@@ -1,7 +1,7 @@
 {
-  "name": "IPA Master Flashcards",
-  "short_name": "IPA Master",
-  "description": "Learn IPA symbols through customizable 3D flashcards.",
+  "name": "IPA365 Flashcards",
+  "short_name": "IPA365 Flashcards",
+  "description": "Master the International Phonetic Alphabet with this free, interactive flashcard tool. Practice consonants, vowels, and diacritics with an efficient study mode.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fcfdfd",
