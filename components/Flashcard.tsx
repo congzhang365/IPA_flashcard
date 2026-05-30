@@ -91,7 +91,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             </div>
           )}
 
-          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{promptFeature === IPAFeature.EXAMPLES ? 'E.g.' : promptFeature}</div>
+          <div className="absolute top-4 right-6 text-slate-300/80 text-[10px] font-black uppercase tracking-wider">{promptFeature === IPAFeature.EXAMPLES ? 'E.g.' : promptFeature}</div>
         </div>
 
         {/* Back */}
@@ -139,7 +139,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             </div>
           )}
           
-          <div className="absolute bottom-4 right-6 text-slate-300 text-[10px] font-black uppercase tracking-widest">{maskedFeature === IPAFeature.EXAMPLES ? 'E.g.' : maskedFeature}</div>
+          <div className="absolute top-4 right-6 text-slate-300/80 text-[10px] font-black uppercase tracking-wider">{maskedFeature === IPAFeature.EXAMPLES ? 'E.g.' : maskedFeature}</div>
         </div>
 
       </div>

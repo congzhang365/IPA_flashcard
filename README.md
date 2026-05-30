@@ -1,6 +1,8 @@
-# IPA Master Flashcards
+# IPA365 Flashcards
 
 Master the International Phonetic Alphabet with this free, interactive flashcard tool. Practice consonants, vowels, and diacritics with an efficient study mode.
+
+Access it here: https://congzhang365.github.io/IPA_flashcard/
 
 > [!NOTE]  
 > This is a beta version. Some functions are to be finalised.

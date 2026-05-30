@@ -330,7 +330,7 @@ const App: React.FC = () => {
           <div className="bg-primary p-2 rounded-xl text-white shadow-lg shadow-primary/20">
             <Layers className="w-5 h-5" />
           </div>
-          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA Flashcard</h1>
+          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA365 Flashcard</h1>
         </div>
         <button 
           onClick={() => { triggerHaptic(); setIsSettingsOpen(true); }}
@@ -505,8 +505,132 @@ const App: React.FC = () => {
             <h2 className="text-xl font-bold text-slate-800 tracking-tight">How to Study</h2>
           </div>
 
+          {/* Two Study Modes Section */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-primary/5 p-1.5 rounded-lg">
+                <Sliders className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Two Modes: Flashcard & Folded Card</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>
+                Depending on how many features you enable in the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500 animate-[spin_10s_linear_infinite]" /> Study Setup</span>, the cards dynamically adapt:
+              </p>
+              <ul className="space-y-2 pl-1.5 border-l-2 border-primary/20">
+                <li>
+                  <span className="font-bold text-slate-800">Classic Flip Mode (Exactly 2 Features Active):</span> Works as a standard dual-sided flashcard. Tap anywhere on the card surface to flip smoothly between prompt and verification faces.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">Multi-Tab Folded Card Mode (3+ Features Active):</span> Evolves into a multi-perspective interactive card. Access individual surfaces instantly via lower index index-tabs or swipe left/right to browse.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Available Features Section */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-primary/5 p-1.5 rounded-lg">
+                <BookOpen className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">What Features are Available?</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>You can toggle on or off any combination of these four rich attributes:</p>
+              <ul className="space-y-2 pl-1.5 border-l-2 border-primary/20">
+                <li>
+                  <span className="font-bold text-slate-800">SYMBOL:</span> IPA symbols (e.g., <span className="ipa-font">[ð]</span>, <span className="ipa-font">[b]</span>).
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">LABEL:</span> Three-term labels (e.g., <span className="italic">Voiced dental fricative</span>).
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">SOUND:</span> An audio of the IPA symbol [currently under development, but will be available in the next version].
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">EXAMPLES (E.g.):</span> Illustrative word examples demonstrating the sound or pronunciation tips.
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Prompt, Answer & Selections section */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-[#7CB5B8]/10 p-1.5 rounded-lg">
+                <Eye className="w-4 h-4 text-secondary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Prompt, Answer & How to Select Them</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>
+                In the Study Setup, you have absolute control over the direction of your learning:
+              </p>
+              <ul className="space-y-1.5 pl-1.5 border-l-2 border-secondary/20">
+                <li>
+                  <span className="font-bold text-slate-800">Prompt:</span> This acts as the front side of a classic flashcard or the first clues presented on a folded card.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">Answer:</span> This represents the target property you need to identify as a response or correct solution.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">How to Select:</span> Tap the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500 animate-[spin_10s_linear_infinite]" /> Study Setup</span> icon button in the top right of the screen. From there, you can choose which of your active features will be the Prompt and which will be the active Answer, and even toggle on all features!
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Mastery Progress Card */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-emerald-50 p-1.5 rounded-lg">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Grading & History Archive</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>Assess your phonetic memory on card review by selecting your feedback level:</p>
+              <div className="grid grid-cols-3 gap-2 text-center text-[10px] uppercase font-bold mt-1">
+                <div className="bg-emerald-50/70 border border-emerald-105 text-emerald-600 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>Yes</span>
+                  <span className="block text-[8px] font-normal lowercase text-emerald-500 mt-1">Archived From Deck</span>
+                </div>
+                <div className="bg-amber-50/70 border border-amber-105 text-amber-600 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>Maybe</span>
+                  <span className="block text-[8px] font-normal lowercase text-amber-500 mt-1">Kept in Deck</span>
+                </div>
+                <div className="bg-rose-50/70 border border-rose-105 text-rose-500 rounded-lg py-1.5 flex flex-col justify-between">
+                  <span>No</span>
+                  <span className="block text-[8px] font-normal lowercase text-rose-500 mt-1">Shuffled back</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Reset Progress Card */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-rose-50 p-1.5 rounded-lg">
+                <RotateCcw className="w-4 h-4 text-rose-400" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Resetting Progress</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed pr-1">
+              <p>
+                To restart your entire learning sessions, open the Study Setup options and choose <span className="font-bold text-rose-500">Reset Progress</span>. This clears your memory history, retrieves all mastered cards, and builds a fully shuffled new deck.
+              </p>
+            </div>
+          </section>
+
           {/* Device Specific Swipeable Installation Guides */}
           <div className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-4">
+            <div className="flex items-center gap-2.5 border-b border-slate-50 pb-2">
+              <div className="bg-primary/5 p-1.5 rounded-lg">
+                <Smartphone className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Offline Web App Setup</h3>
+            </div>
             <div className="flex p-0.5 bg-slate-50 border border-slate-100 rounded-xl gap-1">
               <button 
                 onClick={() => { triggerHaptic(); setInstallTab('ios'); }}
@@ -590,96 +714,6 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Active Features Info Card */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-primary/5 p-1.5 rounded-lg">
-                <Sliders className="w-4 h-4 text-primary" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Active Features & Layouts</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
-              <p>
-                Configure card contents using the <span className="font-bold text-slate-700">Study Setup</span> gear icon:
-              </p>
-              <ul className="space-y-1.5 pl-1.5 border-l-2 border-primary/20">
-                <li>
-                  <span className="font-bold text-slate-700">• At Least 2 Selected:</span> You must toggle on at least 2 active features. When only two are selected, they cannot be deselected to prevent cards from breaking.
-                </li>
-                <li>
-                  <span className="font-bold text-slate-700">• Exactly 2 = Classic Flip:</span> Cards act as standard double-sided flashcards. Tap anywhere on the card to flip between Prompt and Answer.
-                </li>
-                <li>
-                  <span className="font-bold text-slate-700">• 3 or More = Multi-Tab Folds:</span> Cards become premium multi-perspective cards. Tap any of the sleek index tabs at the card base or swipe left/right to change perspective.
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          {/* Choosing Prompt & Answer */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-[#7CB5B8]/10 p-1.5 rounded-lg">
-                <Eye className="w-4 h-4 text-secondary" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Question Flow Selection</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed space-y-1.5">
-              <p>
-                Define your exact prompt direction in the <span className="font-bold text-slate-700">Study Setup</span>:
-              </p>
-              <ul className="space-y-1 pl-1.5 border-l-2 border-secondary/20">
-                <li>
-                  • <span className="font-bold text-slate-700">Prompt:</span> Choose the face presented first (e.g., studying visually with the raw phonetic <span className="font-semibold">Symbol</span>).
-                </li>
-                <li>
-                  • <span className="font-bold text-slate-700">Answer:</span> Choose the final target verification item (e.g., reciting the correct phonetic description <span className="font-semibold">Label</span> or key <span className="font-semibold">Example</span> word). Audio playback is dedicated to output only.
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          {/* Mastery Progress Card */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-emerald-50 p-1.5 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Grading & History Archive</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
-              <p>Assess your phonetic memory on card review by selecting your feedback level:</p>
-              <div className="grid grid-cols-3 gap-2 text-center text-[10px] uppercase font-bold mt-1">
-                <div className="bg-emerald-50/70 border border-emerald-105 text-emerald-600 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>Yes</span>
-                  <span className="block text-[8px] font-normal lowercase text-emerald-500 mt-1">Archived From Deck</span>
-                </div>
-                <div className="bg-amber-50/70 border border-amber-105 text-amber-600 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>Maybe</span>
-                  <span className="block text-[8px] font-normal lowercase text-amber-500 mt-1">Kept in Deck</span>
-                </div>
-                <div className="bg-rose-50/70 border border-rose-105 text-rose-500 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>No</span>
-                  <span className="block text-[8px] font-normal lowercase text-rose-500 mt-1">Shuffled back</span>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Reset Progress Card */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-rose-50 p-1.5 rounded-lg">
-                <RotateCcw className="w-4 h-4 text-rose-400" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Resetting Progress</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed pr-1">
-              <p>
-                To restart your entire learning sessions, open the Study Setup options and choose <span className="font-bold text-rose-500">Reset Progress</span>. This clears your memory history, retrieves all mastered cards, and builds a fully shuffled new deck.
-              </p>
-            </div>
-          </section>
           <IPAAppCredits />
         </main>
       )}
