@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://congzhang365.github.io/IPA_flashcard/sitemap.xml
