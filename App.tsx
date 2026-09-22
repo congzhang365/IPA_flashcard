@@ -332,7 +332,7 @@ const App: React.FC = () => {
             alt="IPA365 logo"
             className="w-9 h-9 rounded-xl shadow-lg shadow-primary/20 object-contain"
           />
-          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA365 Flashcard</h1>
+          <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA365 Flashcards</h1>
         </div>
         <button 
           onClick={() => { triggerHaptic(); setIsSettingsOpen(true); }}

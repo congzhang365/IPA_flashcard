@@ -50,7 +50,7 @@ The bundled IPA recordings were downloaded from the [Interactive IPA Chart](http
 @software{Zhang_2026_IPA-Flashcard,
   author = {{Apache Software Foundation}},
   year = {2026},
-  title = {IPA365 Flashcard},
+  title = {IPA365 Flashcards},
   url = {https://congzhang365.github.io/IPA_flashcard/},
   version = {0.1.1}
   ```
