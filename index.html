@@ -89,6 +89,11 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+    @keyframes confetti {
+      0% { transform: translateY(-12px) rotate(0deg); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: translateY(430px) rotate(260deg); opacity: 0; }
+    }
     button:active {
       transform: scale(0.96);
       transition: transform 0.1s ease;

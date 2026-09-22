@@ -2,6 +2,8 @@ import React from 'react';
 import { IPAFeature, IPACardData, LearningStatus } from '../types';
 import { Volume2, CheckCircle, XCircle, HelpCircle, Check, X } from 'lucide-react';
 import { playIPASound } from '../services/audioService';
+import { IPAKeyboard, KeyboardGroup } from './IPAKKeyboard';
+import { DiacriticExample } from './DiacriticExample';
 
 interface FlashcardProps {
   data: IPACardData;
@@ -12,15 +14,19 @@ interface FlashcardProps {
   isQuiz: boolean;
   userInput: string;
   setUserInput: (val: string) => void;
-  feedback: 'none' | 'correct' | 'incorrect';
+  feedback: 'none' | 'correct' | 'partial' | 'incorrect';
   onSubmit: (val: string) => void;
+  keyboardGroup: KeyboardGroup;
+  onKeyboardGroupChange: (group: KeyboardGroup) => void;
   onMarkStatus?: (status: LearningStatus) => void;
 }
 
 const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ feature, data }) => {
   switch (feature) {
     case IPAFeature.SYMBOL:
-      return <div className="ipa-font text-8xl font-bold text-slate-800">{data.symbol}</div>;
+      return data.category === 'diacritic'
+        ? <DiacriticExample symbol={data.symbol} className="text-8xl font-bold" />
+        : <div className="ipa-font text-8xl font-bold text-slate-800">{data.symbol}</div>;
     case IPAFeature.LABEL:
       return <div className="text-2xl font-semibold text-slate-700 text-center px-4 leading-snug">{data.label}</div>;
     case IPAFeature.EXAMPLES:
@@ -51,8 +57,10 @@ const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
 };
 
 export const Flashcard: React.FC<FlashcardProps> = ({ 
-  data, promptFeature, maskedFeature, isFlipped, onFlip, isQuiz, userInput, setUserInput, feedback, onSubmit, onMarkStatus 
+  data, promptFeature, maskedFeature, isFlipped, onFlip, isQuiz, userInput, setUserInput, feedback, onSubmit, keyboardGroup, onKeyboardGroupChange, onMarkStatus 
 }) => {
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const hasKeyboard = isQuiz && maskedFeature === IPAFeature.SYMBOL;
   const handleQuizSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -60,7 +68,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
   };
 
   return (
-    <div className="w-full max-w-sm h-[390px] perspective-1000 cursor-pointer" onClick={onFlip}>
+    <div className={`w-full max-w-sm ${hasKeyboard ? 'h-[clamp(480px,calc(100dvh-300px),620px)]' : 'h-[390px]'} perspective-1000 cursor-pointer`} onClick={onFlip}>
       <div className={`relative w-full h-full transition-transform duration-300 preserve-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
         
         {/* Front */}
@@ -75,12 +83,17 @@ export const Flashcard: React.FC<FlashcardProps> = ({
               <form onSubmit={handleQuizSubmit} className="w-full flex flex-col gap-2">
                 <input
                   autoFocus
+                  ref={inputRef}
                   type="text"
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-primary outline-none text-center text-xl font-bold bg-slate-50 shadow-inner"
                   placeholder="???"
                 />
+                {maskedFeature === IPAFeature.SYMBOL && data.category === 'diacritic' && (
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Enter the diacritic only</p>
+                )}
+                {maskedFeature === IPAFeature.SYMBOL && <IPAKeyboard value={userInput} onChange={setUserInput} inputRef={inputRef} group={keyboardGroup} onGroupChange={onKeyboardGroupChange} />}
                 <button 
                   type="submit"
                   className="w-full bg-primary text-white py-3 rounded-xl font-black text-sm tracking-widest hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 active:scale-95"
@@ -105,6 +118,11 @@ export const Flashcard: React.FC<FlashcardProps> = ({
             {feedback === 'incorrect' && (
               <div className="text-red-500 flex items-center gap-2 font-black text-xs tracking-widest">
                 <XCircle className="w-5 h-5" /> INCORRECT
+              </div>
+            )}
+            {feedback === 'partial' && (
+              <div className="text-violet-500 flex items-center gap-2 font-black text-xs tracking-widest">
+                <HelpCircle className="w-5 h-5" /> HALF POINT
               </div>
             )}
           </div>

@@ -4,8 +4,11 @@ import { IPAFeature, AppSettings, CardState, LearningStatus } from './types';
 import { ipaDataset } from './data/ipaData';
 import { Flashcard } from './components/Flashcard';
 import { FoldedCard } from './components/FoldedCard';
+import { KeyboardGroup } from './components/IPAKKeyboard';
 import { SettingsOverlay } from './components/SettingsOverlay';
-import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, CheckCircle2, Sliders, Construction, Smartphone, Share, PlusSquare, Eye } from 'lucide-react';
+import { gradeQuizAnswer } from './services/quizGrading';
+import { hasBundledAudio } from './services/audioService';
+import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, CheckCircle2, Sliders, Construction, Smartphone, Share, PlusSquare, Eye, Star } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
 const IPAAppCredits: React.FC = () => (
@@ -16,7 +19,90 @@ const IPAAppCredits: React.FC = () => (
   </div>
 );
 
+const formatStarScore = (score: number) => {
+  if (score % 1 === 0.5) return `${Math.floor(score)}½`;
+  return String(score);
+};
+
+const CollectedStar: React.FC<{ half?: boolean }> = ({ half = false }) => (
+  <span className="relative inline-block h-1.5 w-1.5 shrink-0" aria-hidden="true">
+    <Star className="absolute inset-0 h-1.5 w-1.5 fill-amber-400 text-amber-500" />
+    {half && <span className="absolute inset-y-0 right-0 w-1/2 overflow-hidden bg-amber-100"><Star className="absolute right-0 top-0 h-1.5 w-1.5 fill-amber-100 text-amber-500" /></span>}
+  </span>
+);
+
+const StarJar: React.FC<{ score: number; lastAward: number | null; lastMatchCount: number | null; topScores: number[] }> = ({ score, lastAward, lastMatchCount, topScores }) => {
+  const visibleStarCount = Math.min(Math.floor(score), 24);
+  const hiddenStarCount = Math.max(0, Math.floor(score) - visibleStarCount);
+
+  return (
+    <div className="mt-2 rounded-2xl border border-amber-100 bg-gradient-to-r from-amber-50 to-orange-50 px-3 py-2 text-amber-700 shadow-sm">
+      <div className="flex items-center gap-3">
+        <div className="relative h-12 w-14 shrink-0" aria-label={`Star jar: ${formatStarScore(score)} stars`}>
+          <div className="absolute left-1/2 top-0 z-10 h-2 w-8 -translate-x-1/2 rounded-full bg-amber-400 shadow-sm" />
+          <div className="absolute bottom-0 left-1/2 h-10 w-14 -translate-x-1/2 overflow-hidden rounded-b-xl rounded-t-md border-2 border-amber-300 bg-amber-100/90 px-1.5 pb-1 pt-2 shadow-inner">
+            <div className="flex flex-wrap content-end justify-center gap-px">
+              {Array.from({ length: visibleStarCount }, (_, index) => <CollectedStar key={`star-${index}`} />)}
+              {score % 1 === 0.5 && hiddenStarCount === 0 && <CollectedStar half />}
+            </div>
+            {hiddenStarCount > 0 && <span className="absolute bottom-0.5 right-0.5 rounded bg-amber-300 px-0.5 text-[7px] font-black text-amber-800">+{hiddenStarCount}{score % 1 === 0.5 ? '½' : ''}</span>}
+          </div>
+          <Star key={`${score}-${lastAward}`} className="absolute -right-1 -top-3 z-20 h-4 w-4 fill-amber-400 text-amber-500 animate-bounce" />
+          {lastAward !== null && lastAward > 0 && (
+            <span className="absolute -right-3 -top-3 z-30 animate-ping text-[10px] font-black text-orange-500">+{lastAward === 0.5 ? '½' : '1'}</span>
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-2">
+            <span className="text-[10px] font-black uppercase tracking-widest">Star jar</span>
+            <span className="text-lg font-black leading-none">{formatStarScore(score)} <span className="text-[10px] font-bold uppercase tracking-wider">stars</span></span>
+          </div>
+          <div className="mt-1 flex items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-wider text-amber-600/80">
+            <span>This answer: {lastAward === null ? '—' : `+${lastAward === 0.5 ? '½' : '1'} star${lastMatchCount !== null ? ` (${lastMatchCount}/3 labels)` : ''}`}</span>
+            {topScores.length > 0 && <span className="truncate">Best: {topScores.map(formatStarScore).join(' · ')}</span>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const QueueCelebration: React.FC<{ score: number; preview?: boolean; onReset: () => void }> = ({ score, preview = false, onReset }) => (
+  <div className="relative w-full overflow-hidden rounded-[3rem] border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-primary/10 p-8 text-center shadow-2xl shadow-amber-200/40 animate-in fade-in zoom-in duration-500">
+    <div className="pointer-events-none absolute inset-0">
+      {Array.from({ length: 22 }, (_, index) => (
+        <span
+          key={index}
+          className={`absolute top-0 h-2 w-1.5 rounded-full ${index % 3 === 0 ? 'bg-primary' : index % 3 === 1 ? 'bg-amber-400' : 'bg-secondary'} animate-[confetti_2.4s_ease-in-out_infinite]`}
+          style={{ left: `${5 + ((index * 17) % 90)}%`, animationDelay: `${(index % 8) * 0.12}s` }}
+        />
+      ))}
+    </div>
+    <div className="relative z-10">
+      <div className="mb-4 text-5xl animate-bounce">🎉</div>
+      <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-amber-100 px-4 py-2 text-amber-700 shadow-inner">
+        <Star className="h-5 w-5 fill-amber-400 text-amber-500" />
+        <span className="font-black">{formatStarScore(score)} stars collected</span>
+        <Star className="h-5 w-5 fill-amber-400 text-amber-500" />
+      </div>
+      <h2 className="text-2xl font-black text-slate-800 mb-2">Queue Clear!</h2>
+      <p className="text-slate-500 text-sm mb-7 leading-relaxed">
+        {preview ? 'Celebration preview — this is what appears when you finish a session.' : "You've mastered all cards in this session. Great job!"}
+      </p>
+      <button
+        onClick={onReset}
+        className="w-full py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all"
+      >
+        {preview ? 'CLOSE PREVIEW' : 'RESET PROGRESS'}
+      </button>
+    </div>
+  </div>
+);
+
 const App: React.FC = () => {
+  const celebrationParams = new URLSearchParams(window.location.search);
+  const isCelebrationPreview = celebrationParams.get('celebration-test') === '1';
+  const celebrationPreviewScore = Number(celebrationParams.get('score')) || 12.5;
   const [settings, setSettings] = useState<AppSettings>({
     activeFeatures: [IPAFeature.SYMBOL, IPAFeature.LABEL],
     promptFeature: IPAFeature.SYMBOL,
@@ -42,10 +128,39 @@ const App: React.FC = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'study' | 'lab' | 'tutorial'>('study');
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'consonant' | 'vowel' | 'diacritic'>('all');
+  const [lastKeyboardGroup, setLastKeyboardGroup] = useState<KeyboardGroup>(() => {
+    const saved = localStorage.getItem('ipa_keyboard_group');
+    return saved === 'Vowels' || saved === 'Diacritics' ? saved : 'Consonants';
+  });
   
   const [installTab, setInstallTab] = useState<'ios' | 'android'>('ios');
+  const [quizSessionScore, setQuizSessionScore] = useState(0);
+  const [lastQuizAward, setLastQuizAward] = useState<number | null>(null);
+  const [lastQuizMatchCount, setLastQuizMatchCount] = useState<number | null>(null);
+  const [quizAnswered, setQuizAnswered] = useState(0);
+  const [topQuizScores, setTopQuizScores] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('quiz_top_scores');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const keyboardGroup: KeyboardGroup = selectedCategory === 'vowel'
+    ? 'Vowels'
+    : selectedCategory === 'diacritic'
+      ? 'Diacritics'
+      : selectedCategory === 'consonant'
+        ? 'Consonants'
+        : lastKeyboardGroup;
+  const handleKeyboardGroupChange = (group: KeyboardGroup) => {
+    if (selectedCategory !== 'all') return;
+    setLastKeyboardGroup(group);
+    localStorage.setItem('ipa_keyboard_group', group);
+  };
   const installTouchStart = useRef<number | null>(null);
   const installTouchEnd = useRef<number | null>(null);
+  const quizRunRecorded = useRef(false);
 
   const onInstallTouchStart = (e: React.TouchEvent) => {
     installTouchEnd.current = null;
@@ -120,8 +235,9 @@ const App: React.FC = () => {
     const freshQueue = ipaDataset
       .filter(card => {
         const matchesCategory = selectedCategory === 'all' || card.category === selectedCategory;
+        const hasAudioIfNeeded = settings.promptFeature !== IPAFeature.SOUND || hasBundledAudio(card.id);
         const notRemembered = learnedMap[card.id] !== LearningStatus.REMEMBERED;
-        return matchesCategory && notRemembered;
+        return matchesCategory && hasAudioIfNeeded && notRemembered;
       })
       .map(card => card.id);
     
@@ -133,11 +249,42 @@ const App: React.FC = () => {
       setStudyQueue([]);
     }
     setCardState({ currentQueueIndex: 0, isFlipped: false, userInput: '', feedback: 'none' });
-  }, [selectedCategory]);
+    setQuizSessionScore(0);
+    setLastQuizAward(null);
+    setLastQuizMatchCount(null);
+    setQuizAnswered(0);
+    quizRunRecorded.current = false;
+  }, [selectedCategory, settings.promptFeature]);
+
+  useEffect(() => {
+    if (settings.promptFeature === IPAFeature.SOUND && selectedCategory === 'diacritic') {
+      setSelectedCategory('all');
+    }
+  }, [settings.promptFeature, selectedCategory]);
 
   useEffect(() => {
     localStorage.setItem('learned_map', JSON.stringify(learnedMap));
   }, [learnedMap]);
+
+  useEffect(() => {
+    localStorage.setItem('quiz_top_scores', JSON.stringify(topQuizScores));
+  }, [topQuizScores]);
+
+  useEffect(() => {
+    if (settings.mode === 'QUIZ') {
+      setQuizSessionScore(0);
+      setLastQuizAward(null);
+      setLastQuizMatchCount(null);
+      setQuizAnswered(0);
+      quizRunRecorded.current = false;
+    }
+  }, [settings.mode]);
+
+  useEffect(() => {
+    if (settings.mode !== 'QUIZ' || studyQueue.length !== 0 || quizAnswered === 0 || quizRunRecorded.current) return;
+    quizRunRecorded.current = true;
+    setTopQuizScores(prev => [...prev, quizSessionScore].sort((a, b) => b - a).slice(0, 3));
+  }, [settings.mode, studyQueue.length, quizAnswered, quizSessionScore]);
 
   const handleNext = useCallback(() => {
     if (studyQueue.length === 0) return;
@@ -258,42 +405,63 @@ const App: React.FC = () => {
 
   const handleQuizSubmit = (input: string) => {
     if (!currentCard) return;
-    const targetFeature = settings.maskedFeature;
-    let isCorrect = false;
+    const grade = gradeQuizAnswer(currentCard, input, settings.maskedFeature);
+    setLastQuizAward(grade.score);
+    setLastQuizMatchCount(
+      grade.expectedLabels.length === 3 && grade.matchedLabels.length > 0
+        ? grade.matchedLabels.length
+        : null
+    );
+    setQuizSessionScore(prev => prev + grade.score);
+    setQuizAnswered(prev => prev + 1);
 
-    const sanitizedInput = input.toLowerCase().trim();
-    if (!sanitizedInput) {
-      isCorrect = false;
-    } else if (targetFeature === IPAFeature.SYMBOL) {
-      isCorrect = sanitizedInput === currentCard.symbol.toLowerCase();
-    } else if (targetFeature === IPAFeature.LABEL) {
-      isCorrect = currentCard.label.toLowerCase().includes(sanitizedInput);
-    } else if (targetFeature === IPAFeature.EXAMPLES) {
-      isCorrect = currentCard.words ? currentCard.words.some(w => w.toLowerCase() === sanitizedInput) : false;
-    }
-
-    if (isCorrect) {
-      triggerHaptic('success');
-      setCardState(prev => ({ ...prev, feedback: 'correct', isFlipped: true }));
-      // Wait 1200ms to allow user to see the congrats, then remove card and transit cleanly after flipping back
+    if (grade.score > 0) {
+      triggerHaptic(grade.score === 1 ? 'success' : 'medium');
+      setCardState(prev => ({ ...prev, feedback: grade.feedback, isFlipped: true }));
+      // Give the player a moment to see the result before moving on.
       setTimeout(() => {
-        setCardState(prev => ({ ...prev, isFlipped: false }));
-        setTimeout(() => {
-          const cardId = currentCard.id;
-          setLearnedMap(prev => ({ ...prev, [cardId]: LearningStatus.REMEMBERED }));
-          removeCardFromQueue(cardId);
-        }, 310);
+        if (grade.score === 1) {
+          setCardState(prev => ({ ...prev, isFlipped: false }));
+          setTimeout(() => {
+            const cardId = currentCard.id;
+            setLearnedMap(prev => ({ ...prev, [cardId]: LearningStatus.REMEMBERED }));
+            removeCardFromQueue(cardId);
+          }, 310);
+        } else {
+          // A half-point answer earns credit but keeps the card in rotation.
+          setCardState(prev => ({
+            ...prev,
+            currentQueueIndex: studyQueue.length > 0 ? (prev.currentQueueIndex + 1) % studyQueue.length : 0,
+            isFlipped: false,
+            userInput: '',
+            feedback: 'none'
+          }));
+        }
       }, 1200);
     } else {
       triggerHaptic('error');
       setCardState(prev => ({ ...prev, feedback: 'incorrect', isFlipped: true }));
-      // Push incorrect card to the end of the queue for review
-      setStudyQueue(prev => {
-        if (prev[prev.length - 1] !== currentCard.id) {
-          return [...prev, currentCard.id];
-        }
-        return prev;
-      });
+      // Keep the current card mounted while its correct answer is revealed.
+      const currentIndex = cardState.currentQueueIndex;
+      const nextIndex = studyQueue.length > 1 && currentIndex < studyQueue.length - 1 ? currentIndex : 0;
+      // Reveal the correct answer, then continue to the next card.
+      setTimeout(() => {
+        // Move the missed card to the end only after the reveal is complete.
+        setStudyQueue(prev => {
+          if (prev.length <= 1) return prev;
+          const reordered = [...prev];
+          const [missedCard] = reordered.splice(currentIndex, 1);
+          reordered.push(missedCard);
+          return reordered;
+        });
+        setCardState(prev => ({
+          ...prev,
+          currentQueueIndex: nextIndex,
+          isFlipped: false,
+          userInput: '',
+          feedback: 'none'
+        }));
+      }, 1200);
     }
   };
 
@@ -303,7 +471,8 @@ const App: React.FC = () => {
     
     // Explicitly reset the queue for current category
     const freshQueue = ipaDataset
-      .filter(card => selectedCategory === 'all' || card.category === selectedCategory)
+      .filter(card => (selectedCategory === 'all' || card.category === selectedCategory)
+        && (settings.promptFeature !== IPAFeature.SOUND || hasBundledAudio(card.id)))
       .map(card => card.id);
       
     if (freshQueue.length > 0) {
@@ -355,6 +524,7 @@ const App: React.FC = () => {
           <div className="bg-slate-100 p-1 rounded-full flex gap-1 border border-slate-200/40 relative">
             {(['all', 'consonant', 'vowel', 'diacritic'] as const).map((cat) => {
               const isActive = selectedCategory === cat;
+              const isAudioUnavailable = settings.promptFeature === IPAFeature.SOUND && cat === 'diacritic';
               let displayName = 'All';
               if (cat === 'consonant') displayName = 'Consonants';
               if (cat === 'vowel') displayName = 'Vowels';
@@ -363,12 +533,16 @@ const App: React.FC = () => {
               return (
                 <button
                   key={cat}
+                  disabled={isAudioUnavailable}
                   onClick={() => {
+                    if (isAudioUnavailable) return;
                     triggerHaptic('light');
                     setSelectedCategory(cat);
                   }}
                   className={`flex-1 py-2 rounded-full transition-all duration-300 text-[10px] font-bold uppercase tracking-wider relative ${
-                    isActive
+                    isAudioUnavailable
+                      ? 'text-slate-300 cursor-not-allowed opacity-60'
+                      : isActive
                       ? 'bg-primary text-white shadow-sm font-black scale-[1.02] z-10'
                       : 'text-slate-400 hover:text-slate-600'
                   }`}
@@ -378,15 +552,22 @@ const App: React.FC = () => {
               );
             })}
           </div>
+          {settings.mode === 'QUIZ' && (
+            <StarJar score={quizSessionScore} lastAward={lastQuizAward} lastMatchCount={lastQuizMatchCount} topScores={topQuizScores} />
+          )}
         </div>
       )}
 
       {activeTab === 'study' ? (
         <main className="w-full flex-grow flex flex-col items-center justify-center gap-4 overflow-visible">
-          {studyQueue.length > 0 && currentCard ? (
+          {studyQueue.length > 0 && currentCard && !isCelebrationPreview ? (
             <div className="w-full relative flex flex-col items-center gap-4">
               <div 
-                className="w-full flex justify-center h-[390px] relative group"
+                className={`w-full flex justify-center relative group ${
+                  settings.mode === 'QUIZ' && settings.maskedFeature === IPAFeature.SYMBOL
+                    ? 'h-[clamp(480px,calc(100dvh-300px),620px)]'
+                    : 'h-[390px]'
+                }`}
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
@@ -404,6 +585,8 @@ const App: React.FC = () => {
                     setUserInput={(v) => setCardState(p => ({ ...p, userInput: v }))}
                     feedback={cardState.feedback}
                     onSubmit={handleQuizSubmit}
+                    keyboardGroup={keyboardGroup}
+                    onKeyboardGroupChange={handleKeyboardGroupChange}
                     onMarkStatus={settings.mode === 'FLASHCARD' ? handleMarkStatus : undefined}
                   />
                 ) : (
@@ -418,6 +601,8 @@ const App: React.FC = () => {
                     setUserInput={(v) => setCardState(p => ({ ...p, userInput: v }))}
                     feedback={cardState.feedback}
                     onSubmit={handleQuizSubmit}
+                    keyboardGroup={keyboardGroup}
+                    onKeyboardGroupChange={handleKeyboardGroupChange}
                     onMarkStatus={settings.mode === 'FLASHCARD' ? handleMarkStatus : undefined}
                   />
                 )}
@@ -447,17 +632,7 @@ const App: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="text-center p-12 bg-white rounded-[3rem] shadow-xl border border-slate-100 w-full animate-in fade-in zoom-in">
-              <RotateCcw className="w-16 h-16 text-primary mx-auto mb-6 animate-spin-slow" />
-              <h2 className="text-2xl font-black text-slate-800 mb-2">Queue Clear!</h2>
-              <p className="text-slate-400 text-sm mb-8 leading-relaxed">You've mastered all cards in this session. Great job!</p>
-              <button 
-                onClick={resetAll}
-                className="w-full py-4 bg-primary text-white rounded-2xl font-black text-lg shadow-xl shadow-primary/20 active:scale-95 transition-all"
-              >
-                RESET PROGRESS
-              </button>
-            </div>
+            <QueueCelebration score={isCelebrationPreview ? celebrationPreviewScore : quizSessionScore} preview={isCelebrationPreview} onReset={resetAll} />
           )}
           <IPAAppCredits />
         </main>
@@ -580,6 +755,25 @@ const App: React.FC = () => {
                   <span className="font-bold text-slate-800">How to Select:</span> Tap the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500 animate-[spin_10s_linear_infinite]" /> Study Setup</span> icon button in the top right of the screen. From there, you can choose which of your active features will be the Prompt and which will be the active Answer, and even toggle on all features!
                 </li>
               </ul>
+            </div>
+          </section>
+
+          {/* Quiz Stars and Grading Section */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
+            <div className="flex items-center gap-2.5">
+              <div className="bg-primary/5 p-1.5 rounded-lg">
+                <Star className="w-4 h-4 text-primary" />
+              </div>
+              <h3 className="font-bold text-slate-800 text-sm">Quiz Stars & Auto-Marking</h3>
+            </div>
+            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
+              <p>Quiz answers are marked automatically and your score is shown as stars. A fully correct answer earns <span className="font-bold text-slate-800">1 star</span>; a partial answer earns <span className="font-bold text-slate-800">half a star</span>.</p>
+              <ul className="space-y-1.5 pl-1.5 border-l-2 border-primary/20">
+                <li><span className="font-bold text-slate-800">IPA symbols:</span> The symbol must match. Length marks are accepted flexibly.</li>
+                <li><span className="font-bold text-slate-800">Three-term labels:</span> All three matching terms earn 1 star; two matching terms earn half a star; fewer than two earn none.</li>
+                <li><span className="font-bold text-slate-800">Examples:</span> The answer must match one of the listed examples.</li>
+              </ul>
+              <p>A full-point answer is removed from the deck, while a half-point or incorrect answer returns for more practice. The app keeps your three highest completed quiz scores.</p>
             </div>
           </section>
 

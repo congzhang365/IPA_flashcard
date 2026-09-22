@@ -35,5 +35,5 @@ export interface CardState {
   currentQueueIndex: number;
   isFlipped: boolean;
   userInput: string;
-  feedback: 'none' | 'correct' | 'incorrect';
+  feedback: 'none' | 'correct' | 'partial' | 'incorrect';
 }

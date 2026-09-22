@@ -6,6 +6,14 @@
 
 const LOCAL_AUDIO_BASE_URL = '/audio/';
 
+/** True when a bundled recording currently exists for this card. */
+export const hasBundledAudio = (id: string): boolean => {
+  const match = id.trim().toUpperCase().match(/^([CV])(\d+)$/);
+  if (!match) return false;
+  const number = Number(match[2]);
+  return match[1] === 'C' ? number >= 1 && number <= 59 : number >= 79 && number <= 106;
+};
+
 const checkFileExists = async (url: string): Promise<boolean> => {
   try {
     const response = await fetch(url, { method: 'HEAD' });

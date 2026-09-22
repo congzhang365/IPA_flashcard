@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { IPAFeature, IPACardData, LearningStatus } from '../types';
 import { Volume2, ChevronRight, ChevronLeft, CheckCircle, XCircle, Check, X, HelpCircle } from 'lucide-react';
 import { playIPASound } from '../services/audioService';
+import { IPAKeyboard, KeyboardGroup } from './IPAKKeyboard';
+import { DiacriticExample } from './DiacriticExample';
 
 interface FoldedCardProps {
   data: IPACardData;
@@ -11,8 +13,10 @@ interface FoldedCardProps {
   isQuiz?: boolean;
   userInput: string;
   setUserInput: (val: string) => void;
-  feedback: 'none' | 'correct' | 'incorrect';
+  feedback: 'none' | 'correct' | 'partial' | 'incorrect';
   onSubmit: (val: string) => void;
+  keyboardGroup: KeyboardGroup;
+  onKeyboardGroupChange: (group: KeyboardGroup) => void;
   onMarkStatus?: (status: LearningStatus) => void;
 }
 
@@ -29,7 +33,9 @@ const FeatureIcon: React.FC<{ feature: IPAFeature }> = ({ feature }) => {
 const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ feature, data }) => {
   switch (feature) {
     case IPAFeature.SYMBOL:
-      return <div className="ipa-font text-7xl font-bold text-slate-800">{data.symbol}</div>;
+      return data.category === 'diacritic'
+        ? <DiacriticExample symbol={data.symbol} className="text-7xl font-bold" />
+        : <div className="ipa-font text-7xl font-bold text-slate-800">{data.symbol}</div>;
     case IPAFeature.LABEL:
       return <div className="text-xl font-semibold text-slate-700 text-center px-4 leading-relaxed">{data.label}</div>;
     case IPAFeature.EXAMPLES:
@@ -58,9 +64,11 @@ const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
 };
 
 export const FoldedCard: React.FC<FoldedCardProps> = ({ 
-  data, promptFeature, maskedFeature, features, isQuiz, userInput, setUserInput, feedback, onSubmit, onMarkStatus 
+  data, promptFeature, maskedFeature, features, isQuiz, userInput, setUserInput, feedback, onSubmit, keyboardGroup, onKeyboardGroupChange, onMarkStatus 
 }) => {
   const [activeSurface, setActiveSurface] = useState(0);
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  const hasKeyboard = isQuiz && maskedFeature === IPAFeature.SYMBOL;
 
   useEffect(() => {
     // Start at the prompt feature
@@ -82,7 +90,7 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
 
   return (
     <div 
-      className="w-full max-w-sm h-[390px] relative flex flex-col items-center justify-center bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden cursor-pointer group"
+      className={`w-full max-w-sm ${hasKeyboard ? 'h-[clamp(480px,calc(100dvh-300px),620px)]' : 'h-[390px]'} relative flex flex-col items-center justify-center bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden cursor-pointer group`}
       onClick={nextSurface}
     >
       {/* Visual fold effect */}
@@ -110,12 +118,17 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
              <form onSubmit={handleQuizSubmit} className="flex flex-col gap-3">
                <input
                 autoFocus
+                ref={inputRef}
                 type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 className="w-full px-4 py-4 rounded-2xl border-2 border-slate-100 focus:border-primary outline-none text-center text-xl font-bold bg-slate-50 shadow-inner"
                 placeholder="..."
               />
+              {maskedFeature === IPAFeature.SYMBOL && data.category === 'diacritic' && (
+                <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Enter the diacritic only</p>
+              )}
+              {maskedFeature === IPAFeature.SYMBOL && <IPAKeyboard value={userInput} onChange={setUserInput} inputRef={inputRef} group={keyboardGroup} onGroupChange={onKeyboardGroupChange} />}
               <button 
                 type="submit"
                 className="bg-primary text-white py-4 rounded-2xl font-black text-xs tracking-widest hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 active:scale-95"
@@ -130,7 +143,9 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
               <div className="mb-6 animate-bounce">
                 {feedback === 'correct' ? 
                   <div className="flex items-center gap-2 text-green-500 font-black text-xs tracking-widest"><CheckCircle className="w-5 h-5" /> EXCELLENT</div> : 
-                  <div className="flex items-center gap-2 text-red-500 font-black text-xs tracking-widest"><XCircle className="w-5 h-5" /> REVISE THIS</div>
+                  feedback === 'partial' ?
+                    <div className="flex items-center gap-2 text-violet-500 font-black text-xs tracking-widest"><HelpCircle className="w-5 h-5" /> HALF POINT</div> :
+                    <div className="flex items-center gap-2 text-red-500 font-black text-xs tracking-widest"><XCircle className="w-5 h-5" /> REVISE THIS</div>
                 }
               </div>
             )}
