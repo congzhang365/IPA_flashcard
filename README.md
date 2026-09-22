@@ -48,7 +48,7 @@ The bundled IPA recordings were downloaded from the [Interactive IPA Chart](http
 ## 🤝 Citation
 ```
 @software{Zhang_2026_IPA-Flashcard,
-  author = {{Apache Software Foundation}},
+  author = {{Cong Zhang}},
   year = {2026},
   title = {IPA365 Flashcards},
   url = {https://congzhang365.github.io/IPA_flashcard/},
