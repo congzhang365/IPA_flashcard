@@ -9,10 +9,12 @@ interface SettingsOverlayProps {
   onClose: () => void;
   onReset: () => void;
   onInstall?: () => void;
+  installAvailable?: boolean;
+  installMessage?: string;
 }
 
 export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({ 
-  settings, onUpdate, onClose, onReset, onInstall 
+  settings, onUpdate, onClose, onReset, onInstall, installAvailable = false, installMessage 
 }) => {
   const toggleFeature = (feature: IPAFeature) => {
     let newFeatures = [...settings.activeFeatures];
@@ -75,9 +77,10 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
               onClick={onInstall}
               className="w-full py-3 bg-secondary text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm uppercase tracking-wider hover:brightness-105 active:scale-95 transition-all"
             >
-              <Download className="w-4 h-4" /> Install to Home Screen
+              <Download className="w-4 h-4" /> {installAvailable ? 'Install to Home Screen' : 'Show Install Instructions'}
             </button>
           )}
+          {installMessage && <p className="text-[10px] leading-relaxed text-slate-400 text-center">{installMessage}</p>}
 
           <section>
             <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Study Mode</h3>
