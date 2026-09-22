@@ -29,6 +29,12 @@ Rate your phonetic memory during review to filter future card intervals:
 *   **MAYBE**: Uncertain correctness. Shuffled back into the current deck for continuous reinforcement.
 *   **NO**: Misidentified. Placed immediately back into the immediate review queue.
 
+### 4. Quiz Mode & Automatic Marking
+Quiz Mode provides an IPA keyboard and automatically evaluates answers:
+*   Answers are compared term by term. A sound with three matching terms receive one star, while two receive half a star.
+*   Correct cards leave the active deck. Incorrect cards reveal the correct answer and return to the end of the deck for another attempt.
+*   Quiz points are collected in an animated star jar, with the three highest completed quiz scores retained.
+
 ---
 
 ## 🏗️ TO DO
@@ -36,8 +42,6 @@ Rate your phonetic memory during review to filter future card intervals:
 *   Add recordings for the non-pulmonic consonants and diacritics
 *   Check example details and improve tips
 *   Develop IPA Lab for customised synthesis
-*   Integrate keyboard and/or marking tool for auto marking
-
 
 ---
 
