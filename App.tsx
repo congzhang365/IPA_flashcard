@@ -327,9 +327,11 @@ const App: React.FC = () => {
       
       <header className="w-full flex justify-between items-center mb-3 px-2">
         <div className="flex items-center gap-2">
-          <div className="bg-primary p-2 rounded-xl text-white shadow-lg shadow-primary/20">
-            <Layers className="w-5 h-5" />
-          </div>
+          <img
+            src="/favicon.png"
+            alt="IPA365 logo"
+            className="w-9 h-9 rounded-xl shadow-lg shadow-primary/20 object-contain"
+          />
           <h1 className="text-xl font-black text-slate-800 tracking-tight">IPA365 Flashcard</h1>
         </div>
         <button 

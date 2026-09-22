@@ -20,7 +20,7 @@ Depending on how many features you enable in the **Study Setup** (the gear icon)
 Customise exactly how you are questioned (front side of a flash card or first clue for a folded card) and graded (backside of a flash card). Select from four key features:
 *   **SYMBOL**: The raw phonetic symbol glyph (e.g., `[p]`, `[ð]`).
 *   **LABEL**: Full linguistic phonetic classification descriptive label (e.g., *Voiced dental fricative*).
-*   **SOUND**: Audio speech playback to build strong auditory-phonological links. [**currently unavailable**]
+*   **SOUND**: Bundled IPA speech playback for the pulmonic consonants and vowels.
 *   **EXAMPLES (E.g.)**: Illustrative vocabulary examples (e.g., *pat, apple, stop*).
 
 ### 3. Progressive Grading & Smart Deck Archiving
@@ -33,13 +33,17 @@ Rate your phonetic memory during review to filter future card intervals:
 
 ## 🏗️ TO DO
 
-*   Embed the audio files
+*   Add recordings for the non-pulmonic consonants and diacritics
 *   Check example details and improve tips
 *   Develop IPA Lab for customised synthesis
 *   Integrate keyboard and/or marking tool for auto marking
 
 
 ---
+
+## Audio attribution
+
+The bundled IPA recordings were downloaded from the [Interactive IPA Chart](https://www.ipachart.com/), which credits recordings from Peter Isotalo, User:Denelson83, the UCLA Phonetics Lab Archive, User:Halibutt, User:Pmx, and User:Octane. The chart states that the clips are available under free and/or copyleft licences; see the linked [Wikimedia Commons phonetics collection](https://commons.wikimedia.org/wiki/Category:General_phonetics) for individual licensing details.
 
 ## 🤝 Citation
 ```
