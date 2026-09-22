@@ -328,7 +328,7 @@ const App: React.FC = () => {
       <header className="w-full flex justify-between items-center mb-3 px-2">
         <div className="flex items-center gap-2">
           <img
-            src="/favicon.png"
+            src="./favicon.png"
             alt="IPA365 logo"
             className="w-9 h-9 rounded-xl shadow-lg shadow-primary/20 object-contain"
           />
