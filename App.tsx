@@ -117,7 +117,7 @@ const App: React.FC = () => {
 
   const [studyQueue, setStudyQueue] = useState<string[]>([]);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [installMessage, setInstallMessage] = useState('');
+  const [installMessage, setInstallMessage] = useState(false);
   
   const [cardState, setCardState] = useState<CardState>({
     currentQueueIndex: 0,
@@ -213,30 +213,106 @@ const App: React.FC = () => {
   }, [isSettingsOpen]);
 
   // Handle PWA Installation
-  useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setInstallMessage('');
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+useEffect(() => {
+  const standaloneQuery = window.matchMedia('(display-mode: standalone)');
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) {
-      setInstallMessage('This browser does not provide an automatic install prompt. Use the browser menu and choose “Install app” or “Add to Home Screen”.');
-      return;
-    }
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
+  const checkInstalled = () => {
+    const isStandalone = standaloneQuery.matches;
+
+    const isIOSStandalone =
+      (window.navigator as Navigator & { standalone?: boolean }).standalone === true;
+
+    const installed = isStandalone || isIOSStandalone;
+
+    setIsInstalled(installed);
+
+    if (installed) {
       setDeferredPrompt(null);
-      setInstallMessage('IPA365 Flashcards was added to your home screen.');
-    } else {
-      setInstallMessage('Installation was cancelled. You can try again whenever you are ready.');
+      setInstallMessage('');
     }
   };
+
+  const handleBeforeInstallPrompt = (e: Event) => {
+    e.preventDefault();
+
+    if (standaloneQuery.matches) {
+      return;
+    }
+
+    setDeferredPrompt(e);
+    setInstallMessage('');
+  };
+
+  const handleAppInstalled = () => {
+    setIsInstalled(true);
+    setDeferredPrompt(null);
+    setInstallMessage('');
+  };
+
+  const handleDisplayModeChange = () => {
+    checkInstalled();
+  };
+
+  checkInstalled();
+
+  window.addEventListener(
+    'beforeinstallprompt',
+    handleBeforeInstallPrompt
+  );
+
+  window.addEventListener(
+    'appinstalled',
+    handleAppInstalled
+  );
+
+  standaloneQuery.addEventListener(
+    'change',
+    handleDisplayModeChange
+  );
+
+  return () => {
+    window.removeEventListener(
+      'beforeinstallprompt',
+      handleBeforeInstallPrompt
+    );
+
+    window.removeEventListener(
+      'appinstalled',
+      handleAppInstalled
+    );
+
+    standaloneQuery.removeEventListener(
+      'change',
+      handleDisplayModeChange
+    );
+  };
+}, []);
+
+const handleInstallClick = async () => {
+  if (isInstalled) {
+    return;
+  }
+
+  if (!deferredPrompt) {
+    setInstallMessage(
+      'This browser does not provide an automatic install prompt. Use the browser menu and choose “Install app” or “Add to Home Screen”.'
+    );
+    return;
+  }
+
+  deferredPrompt.prompt();
+
+  const { outcome } = await deferredPrompt.userChoice;
+
+  if (outcome === 'accepted') {
+    setDeferredPrompt(null);
+    setInstallMessage('');
+  } else {
+    setInstallMessage(
+      'Installation was cancelled. You can try again whenever you are ready.'
+    );
+  }
+};
 
   // Initialize queue only on mount or when category changes
   useEffect(() => {
@@ -951,16 +1027,16 @@ const App: React.FC = () => {
       </nav>
 
       {isSettingsOpen && (
-        <SettingsOverlay 
-          settings={settings}
-          onUpdate={setSettings}
-          onClose={() => setIsSettingsOpen(false)}
-          onReset={resetAll}
-          onInstall={handleInstallClick}
-          installAvailable={Boolean(deferredPrompt)}
-          installMessage={installMessage}
-        />
-      )}
+  <SettingsOverlay
+    settings={settings}
+    onUpdate={setSettings}
+    onClose={() => setIsSettingsOpen(false)}
+    onReset={resetAll}
+    onInstall={isInstalled ? undefined : handleInstallClick}
+    installAvailable={!isInstalled && Boolean(deferredPrompt)}
+    installMessage={isInstalled ? '' : installMessage}
+  />
+)}
     </div>
   );
 };
