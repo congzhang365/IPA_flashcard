@@ -31,11 +31,18 @@ const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
       return <div className="text-2xl font-semibold text-slate-700 text-center px-4 leading-snug">{data.label}</div>;
     case IPAFeature.EXAMPLES:
       return (
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex max-h-[230px] w-full flex-col items-center gap-2 overflow-y-auto px-1">
           <span className="text-sm uppercase tracking-widest text-slate-400 mb-2 font-bold">Examples</span>
+          {data.pronunciationTip && (
+            <p className="max-w-[290px] rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-slate-600 text-center break-words">
+              {data.pronunciationTip}
+            </p>
+          )}
           {data.words && data.words.length > 0 ? (
-            data.words.map((w, i) => (
-              <span key={i} className="text-xl font-medium text-slate-700 text-center px-4">{w}</span>
+            data.words.slice(0, data.pronunciationTip ? 1 : 3).map((w, i) => (
+              <span key={i} className="text-xl font-medium text-slate-700 text-center px-4">
+                {typeof w === 'string' ? w : <>{w.word}{w.ipa && <span className="ml-2 text-slate-500">{w.ipa}</span>}</>}
+              </span>
             ))
           ) : (
             <span className="text-slate-400 italic text-xs text-center px-4">No examples (diacritic modifier)</span>

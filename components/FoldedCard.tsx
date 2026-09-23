@@ -4,6 +4,7 @@ import { Volume2, ChevronRight, ChevronLeft, CheckCircle, XCircle, Check, X, Hel
 import { playIPASound } from '../services/audioService';
 import { IPAKeyboard, KeyboardGroup } from './IPAKKeyboard';
 import { DiacriticExample } from './DiacriticExample';
+import { FeatureIcon, featureStyles } from './FeatureIcon';
 
 interface FoldedCardProps {
   data: IPACardData;
@@ -20,16 +21,6 @@ interface FoldedCardProps {
   onMarkStatus?: (status: LearningStatus) => void;
 }
 
-const FeatureIcon: React.FC<{ feature: IPAFeature }> = ({ feature }) => {
-  switch (feature) {
-    case IPAFeature.SYMBOL: return <span className="text-lg font-bold">Ω</span>;
-    case IPAFeature.LABEL: return <span className="text-lg font-bold">abc</span>;
-    case IPAFeature.EXAMPLES: return <span className="text-lg font-bold">""</span>;
-    case IPAFeature.SOUND: return <Volume2 className="w-5 h-5" />;
-    default: return null;
-  }
-};
-
 const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ feature, data }) => {
   switch (feature) {
     case IPAFeature.SYMBOL:
@@ -40,10 +31,17 @@ const FeatureDisplay: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
       return <div className="text-xl font-semibold text-slate-700 text-center px-4 leading-relaxed">{data.label}</div>;
     case IPAFeature.EXAMPLES:
       return (
-        <div className="flex flex-wrap justify-center gap-3 px-4">
+        <div className="flex max-h-[230px] w-full flex-col items-center gap-3 overflow-y-auto px-4">
+          {data.pronunciationTip && (
+            <p className="max-w-[260px] rounded-xl bg-amber-50 px-3 py-2 text-xs leading-relaxed text-slate-600 text-center break-words">
+              {data.pronunciationTip}
+            </p>
+          )}
           {data.words && data.words.length > 0 ? (
-            data.words.map((w, i) => (
-              <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-full text-slate-600 text-sm font-medium">{w}</span>
+            data.words.slice(0, data.pronunciationTip ? 1 : 3).map((w, i) => (
+              <span key={i} className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-full text-slate-600 text-sm font-medium">
+                {typeof w === 'string' ? w : <>{w.word}{w.ipa && <span className="ml-2 text-slate-500">{w.ipa}</span>}</>}
+              </span>
             ))
           ) : (
             <span className="text-slate-400 italic text-xs">No examples (diacritic modifier)</span>
@@ -106,9 +104,9 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
         ))}
       </div>
 
-      <div className="flex flex-col items-center justify-center p-8 text-center w-full min-h-[300px]" key={activeSurface}>
-        <div className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] mb-8 flex items-center gap-2 font-black">
-          <FeatureIcon feature={features[activeSurface]} />
+      <div className="flex h-full w-full flex-col items-center justify-start overflow-y-auto px-8 pb-24 pt-16 text-center" key={activeSurface}>
+        <div className={`mb-6 flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] ${featureStyles[features[activeSurface]].text}`}>
+          <FeatureIcon feature={features[activeSurface]} className="text-lg" />
           {features[activeSurface]}
         </div>
         
@@ -153,7 +151,7 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
             <FeatureDisplay feature={features[activeSurface]} data={data} />
             
             {onMarkStatus && (feedback !== 'none' || !isQuiz) && (
-              <div className="flex gap-4 mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700" onClick={(e) => e.stopPropagation()}>
+              <div className="mt-6 mb-2 flex gap-4 animate-in fade-in slide-in-from-bottom-4 duration-700" onClick={(e) => e.stopPropagation()}>
                 <button 
                   onClick={() => onMarkStatus(LearningStatus.NO)} 
                   className="p-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-100 transition-all active:scale-90 shadow-sm"
@@ -199,8 +197,8 @@ export const FoldedCard: React.FC<FoldedCardProps> = ({
             key={i}
             onClick={(e) => { e.stopPropagation(); setActiveSurface(i); }}
             className={`flex-1 flex items-center justify-center transition-all ${
-              i === activeSurface 
-                ? 'bg-slate-50 text-primary border-t-2 border-primary font-black scale-105' 
+              i === activeSurface
+                ? `${featureStyles[feature].background} ${featureStyles[feature].text} border-t-2 ${featureStyles[feature].border} font-black scale-105`
                 : 'bg-white text-slate-300 hover:text-slate-400'
             }`}
           >

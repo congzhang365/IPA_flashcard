@@ -4,11 +4,12 @@ import { IPAFeature, AppSettings, CardState, LearningStatus } from './types';
 import { ipaDataset } from './data/ipaData';
 import { Flashcard } from './components/Flashcard';
 import { FoldedCard } from './components/FoldedCard';
+import { FeatureIcon, featureStyles } from './components/FeatureIcon';
 import { KeyboardGroup } from './components/IPAKKeyboard';
 import { SettingsOverlay } from './components/SettingsOverlay';
 import { gradeQuizAnswer } from './services/quizGrading';
 import { hasBundledAudio } from './services/audioService';
-import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, CheckCircle2, Sliders, Construction, Smartphone, Share, PlusSquare, Eye, Star } from 'lucide-react';
+import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
 const IPAAppCredits: React.FC = () => (
@@ -117,7 +118,8 @@ const App: React.FC = () => {
 
   const [studyQueue, setStudyQueue] = useState<string[]>([]);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [installMessage, setInstallMessage] = useState(false);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [installMessage, setInstallMessage] = useState('');
   
   const [cardState, setCardState] = useState<CardState>({
     currentQueueIndex: 0,
@@ -766,24 +768,27 @@ const handleInstallClick = async () => {
             <h2 className="text-xl font-bold text-slate-800 tracking-tight">How to Study</h2>
           </div>
 
-          {/* Two Study Modes Section */}
+          {/* How a study session works */}
           <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
             <div className="flex items-center gap-2.5">
               <div className="bg-primary/5 p-1.5 rounded-lg">
                 <Sliders className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-bold text-slate-800 text-sm">Two Modes: Flashcard & Folded Card</h3>
+              <h3 className="font-bold text-slate-800 text-sm">How a Study Session Works</h3>
             </div>
             <div className="text-xs text-slate-500 leading-relaxed space-y-2">
               <p>
-                Depending on how many features you enable in the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500 animate-[spin_10s_linear_infinite]" /> Study Setup</span>, the cards dynamically adapt:
+                Choose your cards, prompt, answer, and study mode in the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500" /> Study Setup</span>. The prompt gives you the clue; the answer is the property you identify.
               </p>
               <ul className="space-y-2 pl-1.5 border-l-2 border-primary/20">
                 <li>
-                  <span className="font-bold text-slate-800">Classic Flip Mode (Exactly 2 Features Active):</span> Works as a standard dual-sided flashcard. Tap anywhere on the card surface to flip smoothly between prompt and verification faces.
+                  <span className="font-bold text-slate-800">Two features:</span> a classic flashcard. Tap the card to flip between the prompt and answer.
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">Multi-Tab Folded Card Mode (3+ Features Active):</span> Evolves into a multi-perspective interactive card. Access individual surfaces instantly via lower index index-tabs or swipe left/right to browse.
+                  <span className="font-bold text-slate-800">Three or more features:</span> a folded card with a tab for each view. Tap a tab or swipe left/right to browse.
+                </li>
+                <li>
+                  <span className="font-bold text-slate-800">Quiz mode:</span> type or select your answer, then submit it for automatic marking and stars.
                 </li>
               </ul>
             </div>
@@ -799,6 +804,14 @@ const handleInstallClick = async () => {
             </div>
             <div className="text-xs text-slate-500 leading-relaxed space-y-2">
               <p>You can toggle on or off any combination of these four rich attributes:</p>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                {Object.values(IPAFeature).map((feature) => (
+                  <div key={feature} className={`flex items-center gap-2 rounded-xl border px-3 py-2 ${featureStyles[feature].background} ${featureStyles[feature].border} ${featureStyles[feature].text}`}>
+                    <FeatureIcon feature={feature} className="text-base" />
+                    <span className="text-[10px] font-black uppercase tracking-wider">{feature === IPAFeature.EXAMPLES ? 'E.g.' : feature}</span>
+                  </div>
+                ))}
+              </div>
               <ul className="space-y-2 pl-1.5 border-l-2 border-primary/20">
                 <li>
                   <span className="font-bold text-slate-800">SYMBOL:</span> IPA symbols (e.g., <span className="ipa-font">[ð]</span>, <span className="ipa-font">[b]</span>).
@@ -816,39 +829,13 @@ const handleInstallClick = async () => {
             </div>
           </section>
 
-          {/* Prompt, Answer & Selections section */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-[#7CB5B8]/10 p-1.5 rounded-lg">
-                <Eye className="w-4 h-4 text-secondary" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Prompt, Answer & How to Select Them</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
-              <p>
-                In the Study Setup, you have absolute control over the direction of your learning:
-              </p>
-              <ul className="space-y-1.5 pl-1.5 border-l-2 border-secondary/20">
-                <li>
-                  <span className="font-bold text-slate-800">Prompt:</span> This acts as the front side of a classic flashcard or the first clues presented on a folded card.
-                </li>
-                <li>
-                  <span className="font-bold text-slate-800">Answer:</span> This represents the target property you need to identify as a response or correct solution.
-                </li>
-                <li>
-                  <span className="font-bold text-slate-800">How to Select:</span> Tap the <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-slate-700 font-bold text-[11px] align-middle"><Settings className="w-3.5 h-3.5 text-slate-500 animate-[spin_10s_linear_infinite]" /> Study Setup</span> icon button in the top right of the screen. From there, you can choose which of your active features will be the Prompt and which will be the active Answer, and even toggle on all features!
-                </li>
-              </ul>
-            </div>
-          </section>
-
-          {/* Quiz Stars and Grading Section */}
+          {/* Quiz and review grading */}
           <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
             <div className="flex items-center gap-2.5">
               <div className="bg-primary/5 p-1.5 rounded-lg">
                 <Star className="w-4 h-4 text-primary" />
               </div>
-              <h3 className="font-bold text-slate-800 text-sm">Quiz Stars & Auto-Marking</h3>
+              <h3 className="font-bold text-slate-800 text-sm">Quiz & Review: Grading and History</h3>
             </div>
             <div className="text-xs text-slate-500 leading-relaxed space-y-2">
               <p>Quiz answers are marked automatically and your score is shown as stars. A fully correct answer earns <span className="font-bold text-slate-800">1 star</span>; a partial answer earns <span className="font-bold text-slate-800">half a star</span>.</p>
@@ -857,34 +844,19 @@ const handleInstallClick = async () => {
                 <li><span className="font-bold text-slate-800">Three-term labels:</span> All three matching terms earn 1 star; two matching terms earn half a star; fewer than two earn none.</li>
                 <li><span className="font-bold text-slate-800">Examples:</span> The answer must match one of the listed examples.</li>
               </ul>
-              <p>A full-point answer is removed from the deck, while a half-point or incorrect answer returns for more practice. The app keeps your three highest completed quiz scores.</p>
-            </div>
-          </section>
-
-          {/* Mastery Progress Card */}
-          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md shadow-slate-100/30 flex flex-col gap-2.5">
-            <div className="flex items-center gap-2.5">
-              <div className="bg-emerald-50 p-1.5 rounded-lg">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              </div>
-              <h3 className="font-bold text-slate-800 text-sm">Grading & History Archive</h3>
-            </div>
-            <div className="text-xs text-slate-500 leading-relaxed space-y-2">
-              <p>Assess your phonetic memory on card review by selecting your feedback level:</p>
+              <p>In review mode, use the feedback buttons after revealing the answer:</p>
               <div className="grid grid-cols-3 gap-2 text-center text-[10px] uppercase font-bold mt-1">
-                <div className="bg-emerald-50/70 border border-emerald-105 text-emerald-600 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>Yes</span>
-                  <span className="block text-[8px] font-normal lowercase text-emerald-500 mt-1">Archived From Deck</span>
+                <div className="bg-green-50 border border-green-100 text-green-500 rounded-xl py-2 px-1 flex flex-col items-center gap-1">
+                  <Check className="w-4 h-4" /><span>Yes</span><span className="text-[8px] font-normal lowercase text-green-500">archived from deck</span>
                 </div>
-                <div className="bg-amber-50/70 border border-amber-105 text-amber-600 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>Maybe</span>
-                  <span className="block text-[8px] font-normal lowercase text-amber-500 mt-1">Kept in Deck</span>
+                <div className="bg-secondary/10 border border-secondary/20 text-secondary rounded-xl py-2 px-1 flex flex-col items-center gap-1">
+                  <HelpCircle className="w-4 h-4" /><span>Maybe</span><span className="text-[8px] font-normal lowercase text-secondary">kept in deck</span>
                 </div>
-                <div className="bg-rose-50/70 border border-rose-105 text-rose-500 rounded-lg py-1.5 flex flex-col justify-between">
-                  <span>No</span>
-                  <span className="block text-[8px] font-normal lowercase text-rose-500 mt-1">Shuffled back</span>
+                <div className="bg-red-50 border border-red-100 text-red-500 rounded-xl py-2 px-1 flex flex-col items-center gap-1">
+                  <X className="w-4 h-4" /><span>No</span><span className="text-[8px] font-normal lowercase text-red-500">shuffled back</span>
                 </div>
               </div>
+              <p>A full-point quiz answer is removed from the deck; partial or incorrect answers return for more practice. The app keeps your three highest completed quiz scores.</p>
             </div>
           </section>
 

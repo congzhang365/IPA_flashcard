@@ -17,9 +17,15 @@ export interface IPACardData {
   id: string;
   symbol: string;
   label: string;
-  words?: string[];
+  pronunciationTip?: string;
+  words?: Array<string | WordExample>;
   audioPrompts?: string[]; 
   category: 'consonant' | 'vowel' | 'diacritic';
+}
+
+export interface WordExample {
+  word: string;
+  ipa?: string;
 }
 
 export type StudyMode = 'FLASHCARD' | 'QUIZ';

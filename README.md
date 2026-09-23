@@ -35,6 +35,10 @@ Quiz Mode provides an IPA keyboard and automatically evaluates answers:
 *   Correct cards leave the active deck. Incorrect cards reveal the correct answer and return to the end of the deck for another attempt.
 *   Quiz points are collected in an animated star jar, with the three highest completed quiz scores retained.
 
+### Pronunciation tips and examples
+
+Sound cards can include a pronunciation tip and broad-transcription examples such as `pat /pæt/`. The pronunciation tips are adapted from [Newcastle University's IPA Online](https://teaching.ncl.ac.uk/ipa/) resources and used under their Creative Commons Attribution–NonCommercial licence. Some descriptions for symbols without an NCL production tip are original additions for this app.
+
 ---
 
 ## 🏗️ TO DO
