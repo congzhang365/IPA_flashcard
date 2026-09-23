@@ -4,7 +4,9 @@
  * example, C001.mp3 for [p]), which keeps Unicode IPA symbols out of the lookup.
  */
 
-const LOCAL_AUDIO_BASE_URL = '/audio/';
+// Vite supplies './' for the GitHub Pages deployment, so audio also works
+// when the app is hosted under /IPA_flashcard/ rather than at the domain root.
+const LOCAL_AUDIO_BASE_URL = `${import.meta.env.BASE_URL}audio/`;
 
 /** True when a bundled recording currently exists for this card. */
 export const hasBundledAudio = (id: string): boolean => {

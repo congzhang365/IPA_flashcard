@@ -98,15 +98,6 @@ export const gradeQuizAnswer = (
     return gradeLabelComparison(card.label, answerLabel);
   }
 
-  if (targetFeature === IPAFeature.EXAMPLES) {
-    const isCorrect = card.words?.some(word => normalize(word) === answer) ?? false;
-    return {
-      score: isCorrect ? 1 : 0,
-      feedback: isCorrect ? 'correct' : 'incorrect',
-      matchedLabels: isCorrect ? [answer] : [],
-      expectedLabels: card.words?.map(normalize) ?? [],
-    };
-  }
-
+  // Examples are supporting reference material, not quiz targets.
   return { score: 0, feedback: 'incorrect', matchedLabels: [], expectedLabels: [] };
 };

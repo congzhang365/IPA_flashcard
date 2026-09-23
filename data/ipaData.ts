@@ -7,624 +7,628 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'p',
     category: 'consonant',
     label: 'Voiceless bilabial plosive',
-    words: ['pat', 'apple', 'stop'],
-    audioPrompts: ['The voiceless bilabial plosive sound p', 'Pronounce p as in pat']
+    pronunciationTip: 'Lips come together then apart for the vowel. Remember this is unaspirated; try spark with a silent /s/.',
+    words: [
+      { word: 'pat', ipa: '/pæt/' },
+      { word: 'apple', ipa: '/ˈæpəl/' },
+      { word: 'stop', ipa: '/stɒp/' },
+    ],
   },
   {
     id: 'C002',
     symbol: 'b',
     category: 'consonant',
     label: 'Voiced bilabial plosive',
+    pronunciationTip: "Lips come together then apart for the vowel. Remember this is fully voiced, start voicing during closure. E.g. Arabic \"balad\" country.",
     words: ['bat', 'rabbit', 'cab'],
-    audioPrompts: ['The voiced bilabial plosive sound b', 'Pronounce b as in bat']
   },
   {
     id: 'C003',
     symbol: 't',
     category: 'consonant',
     label: 'Voiceless alveolar plosive',
+    pronunciationTip: "Tongue tip or blade forms a closure with the alveolar ridge. Remember this is unaspirated, try stark with a silent /s/.",
     words: ['tap', 'better', 'pot'],
-    audioPrompts: ['The voiceless alveolar plosive sound t', 'Pronounce t as in tap']
   },
   {
     id: 'C004',
     symbol: 'd',
     category: 'consonant',
     label: 'Voiced alveolar plosive',
+    pronunciationTip: "Tongue tip or blade forms a closure with the alveolar ridge. Remember this is fully voiced, start voicing during closure. E.g. Arabic \"damm\" blood.",
     words: ['dad', 'ladder', 'sad'],
-    audioPrompts: ['The voiced alveolar plosive sound d', 'Pronounce d as in dad']
   },
   {
     id: 'C005',
     symbol: 'ʈ',
     category: 'consonant',
     label: 'Voiceless retroflex plosive',
+    pronunciationTip: "Tongue tip curled and underside makes post-alveolar contact. E.g. Norwegian \"kort\" card; Indian English time.",
     words: ['t-sound in Swedish "stor" (retroflex)'],
-    audioPrompts: ['Voiceless retroflex plosive']
   },
   {
     id: 'C006',
     symbol: 'ɖ',
     category: 'consonant',
     label: 'Voiced retroflex plosive',
+    pronunciationTip: "Fully voiced, tongue tip curled and underside makes post-alveolar contact. Norwegian \"varde\" beacon; Indian English dime.",
     words: ['d-sound in Swedish "bord" (retroflex)'],
-    audioPrompts: ['Voiced retroflex plosive']
   },
   {
     id: 'C007',
     symbol: 'c',
     category: 'consonant',
     label: 'Voiceless palatal plosive',
+    pronunciationTip: "Main body of the tongue forms a closure with the palate over a large area. Tongue tip down behind the lower teeth. Spread lips. Try to avoid producing this with an affricated release. E.g. French \"musique\" music.",
     words: ['Hungarian "tutaj"'],
-    audioPrompts: ['Voiceless palatal plosive']
   },
   {
     id: 'C008',
     symbol: 'ɟ',
     category: 'consonant',
     label: 'Voiced palatal plosive',
+    pronunciationTip: "Main body of the tongue makes contact with palate over a large area. Tongue tip behind the lower teeth. Spread lips. Fully voiced. E.g. Hungarian \"gyám\" guardian.",
     words: ['Hungarian "gyár"'],
-    audioPrompts: ['Voiced palatal plosive']
   },
   {
     id: 'C009',
     symbol: 'k',
     category: 'consonant',
     label: 'Voiceless velar plosive',
+    pronunciationTip: "Make [k] + glottal closure; raise larynx first then release velar closure while maintaining glottal stop.",
     words: ['cat', 'bucket', 'back'],
-    audioPrompts: ['The voiceless velar plosive sound k', 'Pronounce k as in cat']
   },
   {
     id: 'C010',
     symbol: 'g',
     category: 'consonant',
     label: 'Voiced velar plosive',
+    pronunciationTip: "Tongue back raised towards the velum. Remember this is unaspirated, try sky with a silent /s/.",
     words: ['go', 'bigger', 'bag'],
-    audioPrompts: ['The voiced velar plosive sound g', 'Pronounce g as in go']
   },
   {
     id: 'C011',
     symbol: 'q',
     category: 'consonant',
     label: 'Voiceless uvular plosive',
+    pronunciationTip: "Start with [k] closure and slide tongue backwards and downwards. E.g. Arabic \"qalb\" heart.",
     words: ['Arabic "Qur’an" (aspiration)'],
-    audioPrompts: ['Voiceless uvular plosive']
   },
   {
     id: 'C012',
     symbol: 'ɢ',
     category: 'consonant',
     label: 'Voiced uvular plosive',
+    pronunciationTip: "start with [g] closure and slide tongue backwards and downwards. Fully voiced. E.g. Persian \"Gaza\" food.",
     words: ['Persian "Gharb" (some dialects)'],
-    audioPrompts: ['Voiced uvular plosive']
   },
   {
     id: 'C013',
     symbol: 'ʔ',
     category: 'consonant',
     label: 'Voiceless glottal plosive',
+    pronunciationTip: "Glottal closure. Try coughing or flicking finger just above larynx to feel place of articulation and hear a note or pitch.",
     words: ['uh-oh (middle break)', 'button (bottle in Cockney)'],
-    audioPrompts: ['The voiceless glottal plosive (glottal stop)']
   },
   {
     id: 'C014',
     symbol: 'm',
     category: 'consonant',
     label: 'Voiced bilabial nasal',
+    pronunciationTip: "Lips come together then apart for the vowel. Velum is lowered to allow nasal escape.",
     words: ['man', 'hammer', 'him'],
-    audioPrompts: ['Voiced bilabial nasal m']
   },
   {
     id: 'C015',
     symbol: 'ɱ',
     category: 'consonant',
     label: 'Voiced labiodental nasal',
+    pronunciationTip: "Lower lip and upper teeth contact. Similar to [m] realisation in emphasise.",
     words: ['emphasis', 'symphony'],
-    audioPrompts: ['Voiced labiodental nasal']
   },
   {
     id: 'C016',
     symbol: 'n',
     category: 'consonant',
     label: 'Voiced alveolar nasal',
+    pronunciationTip: "Tongue tip or blade forms a closure with the alveolar ridge. Velum is lowered to allow nasal escape.",
     words: ['net', 'funny', 'pin'],
-    audioPrompts: ['Voiced alveolar nasal n']
   },
   {
     id: 'C017',
     symbol: 'ɳ',
     category: 'consonant',
     label: 'Voiced retroflex nasal',
+    pronunciationTip: "Tongue tip curled and underside makes post-alveolar contact. Velum is lowered to allow nasal escape.",
     words: ['Swedish "barn"'],
-    audioPrompts: ['Voiced retroflex nasal']
   },
   {
     id: 'C018',
     symbol: 'ɲ',
     category: 'consonant',
     label: 'Voiced palatal nasal',
+    pronunciationTip: "Main body of the tongue makes contact with palate over a large area. Tongue tip down behind lower teeth. Spread lips. Velum is lowered to allow nasal escape. e.g. Spanish \"mañana\" tomorrow; French \"agneau\" lamb; English onion.",
     words: ['Spanish "niño" (ñ)', 'French "peigne"'],
-    audioPrompts: ['Voiced palatal nasal']
   },
   {
     id: 'C019',
     symbol: 'ŋ',
     category: 'consonant',
     label: 'Voiced velar nasal',
+    pronunciationTip: "Tongue back raised towards the velum which is lowered to allow airflow into the nasal cavity.",
     words: ['sing', 'finger', 'sink'],
-    audioPrompts: ['Voiced velar nasal (eng)']
   },
   {
     id: 'C020',
     symbol: 'ɴ',
     category: 'consonant',
     label: 'Voiced uvular nasal',
+    pronunciationTip: "Start with the velar nasal constriction and slide your tongue backwards towards uvula. Velum is lowered to allow nasal escape. E.g. Spanish \"enjuto\" dry.",
     words: ['Japanese "Nihon" (word-final)'],
-    audioPrompts: ['Voiced uvular nasal']
   },
   {
     id: 'C021',
     symbol: 'ʙ',
     category: 'consonant',
     label: 'Voiced bilabial trill',
+    pronunciationTip: "Place upper and lower lips together so that inner parts make contact; start a powerful pulmonic pressure and adjust labial tension until the lips start to vibrate. Try voiceless first then add voicing.",
     words: ['shivering "brrr" sound'],
-    audioPrompts: ['Voiced bilabial trill']
   },
   {
     id: 'C022',
     symbol: 'r',
     category: 'consonant',
     label: 'Voiced alveolar trill',
+    pronunciationTip: "Tongue tip rests loosely against back of alveolar ridge; start a powerful pulmonic pressure so that airstream can cause tongue tip to vibrate. E.g. Spanish \"perro\" dog. Try voiceless first; try fast repetitions of \"ta da ta ta ta da\".",
     words: ['Spanish "perro" (rolled r)'],
-    audioPrompts: ['Voiced alveolar trill']
   },
   {
     id: 'C023',
     symbol: 'ʀ',
     category: 'consonant',
     label: 'Voiced uvular trill',
+    pronunciationTip: "Try gargling noise. Try voiceless first. Try practicing with different amounts of pressure behind the tongue and different degrees of tension in the tongue. E.g. Portuguese \"carro\" car.",
     words: ['French "r" (traditional stage/southern)'],
-    audioPrompts: ['Voiced uvular trill']
   },
   {
     id: 'C024',
     symbol: 'ⱱ',
     category: 'consonant',
     label: 'Voiced labiodental flap',
+    pronunciationTip: "Lower lip placed behind the upper teeth. The lower lip is then flipped outward, striking the upper teeth in passing.",
     words: ['Mono "vwi"'],
-    audioPrompts: ['Voiced labiodental flap']
   },
   {
     id: 'C025',
     symbol: 'ɾ',
     category: 'consonant',
     label: 'Voiced alveolar tap',
+    pronunciationTip: "Tongue tip is \"thrown\" or flicked against alveolar ridge in fast movement and back to neutral position. E.g. Spanish \"pero\" but; American English bottom.",
     words: ['butter (standard US English "tt")', 'Spanish "pero" (single r)'],
-    audioPrompts: ['Voiced alveolar tap/flap']
   },
   {
     id: 'C026',
     symbol: 'ɽ',
     category: 'consonant',
     label: 'Voiced retroflex flap',
+    pronunciationTip: "Tongue tip curled towards post-alveolar area and hits the back of the ridge on its way back to neutral position. E.g. Hindi \"gora\" horse.",
     words: ['Hindi "bada" (big)'],
-    audioPrompts: ['Voiced retroflex flap']
   },
   {
     id: 'C027',
     symbol: 'ɸ',
     category: 'consonant',
     label: 'Voiceless bilabial fricative',
+    pronunciationTip: "Lips come together but remain loose to allow narrow air escape causing friction. No lip rounding. E.g. Ewe \"efa\" he polished.",
     words: ['blowing out a candle'],
-    audioPrompts: ['Voiceless bilabial fricative']
   },
   {
     id: 'C028',
     symbol: 'β',
     category: 'consonant',
     label: 'Voiced bilabial fricative',
+    pronunciationTip: "Lips come together but remain loose to allow narrow air escape causing friction. No lip rounding. Fully voiced. E.g. \"Ewe\" the Ewe language.",
     words: ['Spanish "cabo" (b between vowels)'],
-    audioPrompts: ['Voiced bilabial fricative']
   },
   {
     id: 'C029',
     symbol: 'f',
     category: 'consonant',
     label: 'Voiceless labiodental fricative',
+    pronunciationTip: "Lower lip placed behind the upper teeth. Air escapes through narrow constriction causing friction.",
     words: ['fan', 'coffee', 'leaf'],
-    audioPrompts: ['The voiceless labiodental fricative sound f']
   },
   {
     id: 'C030',
     symbol: 'v',
     category: 'consonant',
     label: 'Voiced labiodental fricative',
+    pronunciationTip: "Lower lip placed behind the upper teeth. Air escapes through narrow constriction causing friction. Fully voiced.",
     words: ['van', 'over', 'love'],
-    audioPrompts: ['The voiced labiodental fricative sound v']
   },
   {
     id: 'C031',
     symbol: 'θ',
     category: 'consonant',
     label: 'Voiceless dental fricative',
+    pronunciationTip: "Tongue tip approximates closely to the upper teeth, air escapes through narrow constriction causing friction.",
     words: ['thin', 'author', 'path'],
-    audioPrompts: ['The voiceless dental fricative sound theta']
   },
   {
     id: 'C032',
     symbol: 'ð',
     category: 'consonant',
     label: 'Voiced dental fricative',
+    pronunciationTip: "Tongue tip approximates closely to the upper teeth, air escapes through narrow constriction causing friction. Fully voiced.",
     words: ['this', 'father', 'bathe'],
-    audioPrompts: ['The voiced dental fricative sound eth']
   },
   {
     id: 'C033',
     symbol: 's',
     category: 'consonant',
     label: 'Voiceless alveolar fricative',
+    pronunciationTip: "Make [s] + glottal closure; raise larynx first then release alveolar constriction while maintaining glottal stop.",
     words: ['sip', 'passing', 'hiss'],
-    audioPrompts: ['Voiceless alveolar fricative s']
   },
   {
     id: 'C034',
     symbol: 'z',
     category: 'consonant',
     label: 'Voiced alveolar fricative',
+    pronunciationTip: "Tongue tip/blade forms narrow grooved constriction with alveolar ridge. Fully voiced.",
     words: ['zip', 'lazy', 'buzz'],
-    audioPrompts: ['Voiced alveolar fricative z']
   },
   {
     id: 'C037',
     symbol: 'ʂ',
     category: 'consonant',
     label: 'Voiceless retroflex fricative',
+    pronunciationTip: "Tongue tip curled towards post-alveolar area and creating a narrow constriction. E.g. Polish \"szum\" rustle.",
     words: ['Swedish "kust" (retroflex s)', 'Mandarin "shi"'],
-    audioPrompts: ['Voiceless retroflex fricative']
   },
   {
     id: 'C038',
     symbol: 'ʐ',
     category: 'consonant',
     label: 'Voiced retroflex fricative',
+    pronunciationTip: "Tongue tip curled towards post-alveolar area and creating a narrow constriction. Fully voiced. E.g. Polish \"zona\" wife.",
     words: ['Russian "zhena" (wife)', 'Mandarin "ri"'],
-    audioPrompts: ['Voiced retroflex fricative']
   },
   {
     id: 'C035',
     symbol: 'ʃ',
     category: 'consonant',
     label: 'Voiceless postalveolar fricative',
+    pronunciationTip: "Tongue blade creates a narrow dome-shaped constriction with the back of the alveolar ridge.",
     words: ['she', 'ocean', 'rush'],
-    audioPrompts: ['Voiceless postalveolar fricative esh']
   },
   {
     id: 'C036',
     symbol: 'ʒ',
     category: 'consonant',
     label: 'Voiced postalveolar fricative',
+    pronunciationTip: "Tongue blade creates a narrow constriction with the back of the alveolar ridge. Fully voiced.",
     words: ['measure', 'vision', 'beige'],
-    audioPrompts: ['Voiced postalveolar fricative ezh']
   },
   {
     id: 'C039',
     symbol: 'ç',
     category: 'consonant',
     label: 'Voiceless palatal fricative',
+    pronunciationTip: "Start with [i], devoice, then raise tongue to narrow the constriction channel. E.g. German \"ich\", English human.",
     words: ['German "ich"'],
-    audioPrompts: ['Voiceless palatal fricative']
   },
   {
     id: 'C040',
     symbol: 'ʝ',
     category: 'consonant',
     label: 'Voiced palatal fricative',
+    pronunciationTip: "Start with [i], then raise tongue to narrow the constriction channel until audible frication is generated. Fully voiced. E.g. Dutch \"goed\" good.",
     words: ['Spanish "yema" (intense)'],
-    audioPrompts: ['Voiced palatal fricative']
   },
   {
     id: 'C041',
     symbol: 'x',
     category: 'consonant',
     label: 'Voiceless velar fricative',
+    pronunciationTip: "Same place as [k], but open small channel between tongue and soft palate. E.g. Spanish \"jamás\" never.",
     words: ['German "ach"', 'Scottish English "loch"'],
-    audioPrompts: ['Voiceless velar fricative chi']
   },
   {
     id: 'C042',
     symbol: 'ɣ',
     category: 'consonant',
     label: 'Voiced velar fricative',
+    pronunciationTip: "Same place as [g], but open small channel between tongue and soft palate. Fully voiced. E.g. Arabic \"ghaali\" expensive.",
     words: ['Spanish "fuego" (g between vowels)'],
-    audioPrompts: ['Voiced velar fricative']
   },
   {
     id: 'C043',
     symbol: 'χ',
     category: 'consonant',
     label: 'Voiceless uvular fricative',
+    pronunciationTip: "Start with [q] then open up a small central channel; or start with [x] and retract your tongue. E.g. Scottish loch.",
     words: ['French hard "r" (Parisian "j" sound-like)'],
-    audioPrompts: ['Voiceless uvular fricative']
   },
   {
     id: 'C044',
     symbol: 'ʁ',
     category: 'consonant',
     label: 'Voiced uvular fricative',
+    pronunciationTip: "Tongue is flat or convex, as opposed to grooved position for [R]. e.g. French \"rouge\" red.",
     words: ['French standard "r" in "rouge"'],
-    audioPrompts: ['Voiced uvular fricative']
   },
   {
     id: 'C045',
     symbol: 'ħ',
     category: 'consonant',
     label: 'Voiceless pharyngeal fricative',
+    pronunciationTip: "Send a voiceless airstream through the contracted pharynx. E.g. Arabic \"Haliib\" milk.",
     words: ['Arabic "Muhammad"'],
-    audioPrompts: ['Voiceless pharyngeal fricative']
   },
   {
     id: 'C046',
     symbol: 'ʕ',
     category: 'consonant',
     label: 'Voiced pharyngeal fricative',
+    pronunciationTip: "Send a voiced airstream through the contracted pharynx. E.g. Arabic \"@amm\" uncle.",
     words: ['Arabic "ʿayn"'],
-    audioPrompts: ['Voiced pharyngeal fricative']
   },
   {
     id: 'C047',
     symbol: 'h',
     category: 'consonant',
     label: 'Voiceless glottal fricative',
+    pronunciationTip: "Might be regarded as a voiceless vowel.",
     words: ['hat', 'ahead'],
-    audioPrompts: ['Voiceless glottal fricative h']
   },
   {
     id: 'C048',
     symbol: 'ɦ',
     category: 'consonant',
     label: 'Voiced glottal fricative',
+    pronunciationTip: "Breathy voice. May take place intervocalically in English, e.g. Aha! Low vocal fold tension.",
     words: ['ahead (sometimes voiced)', 'behind'],
-    audioPrompts: ['Voiced glottal fricative']
   },
   {
     id: 'C049',
     symbol: 'ɬ',
     category: 'consonant',
     label: 'Voiceless alveolar lateral fricative',
+    pronunciationTip: "Start with whispered/voiceless [l] and gradually raise sides on tongue until friction is audible. Whisper bottle to feel lateral fricative release. E.g. Welsh \"Llan\" church.",
     words: ['Welsh "Llan" (double l)'],
-    audioPrompts: ['Voiceless alveolar lateral fricative']
   },
   {
     id: 'C050',
     symbol: 'ɮ',
     category: 'consonant',
     label: 'Voiced alveolar lateral fricative',
+    pronunciationTip: "Start with [l] and gradually raise sides on tongue until friction is audible. E.g. Zulu \"dlala\" to play.",
     words: ['Zulu "dlala" (to play)'],
-    audioPrompts: ['Voiced alveolar lateral fricative']
   },
   {
     id: 'C051',
     symbol: 'ʋ',
     category: 'consonant',
     label: 'Voiced labiodental approximant',
+    pronunciationTip: "Same as [v] but constriction channel is slightly wider by sliding lower lip downwards while maintaining lip contact. No audible friction.",
     words: ['Dutch "w"', 'Finnish "v"'],
-    audioPrompts: ['Voiced labiodental approximant']
   },
   {
     id: 'C052',
     symbol: 'ɹ',
     category: 'consonant',
     label: 'Voiced alveolar approximant',
+    pronunciationTip: "Tongue tip/blade held loosely against alveolar ridge, creating and open approximation. Fully voiced. Similar to /r/ in many British English accents. Slight lip-rounding.",
     words: ['run', 'very (standard UK approx r)'],
-    audioPrompts: ['Voiced alveolar approximant']
   },
   {
     id: 'C053',
     symbol: 'ɻ',
     category: 'consonant',
     label: 'Voiced retroflex approximant',
+    pronunciationTip: "Tongue tip towards post-alveolar area, creating and open approximation. Fully voiced. Similar to /r/ in many American English accents.",
     words: ['run (standard US English "r")'],
-    audioPrompts: ['Voiced retroflex approximant']
   },
   {
     id: 'C054',
     symbol: 'j',
     category: 'consonant',
     label: 'Voiced palatal approximant',
+    pronunciationTip: "Front (main body of) tongue approximates the hard palate over a large area. Tongue tip and blade down. Spread lips. Vocal tract shape is same as for [i] but held only for an instant.",
     words: ['yes', 'onion', 'beyond'],
-    audioPrompts: ['Voiced palatal approximant (yod)']
   },
   {
     id: 'C055',
     symbol: 'ɰ',
     category: 'consonant',
     label: 'Voiced velar approximant',
+    pronunciationTip: "Same place as [g] and [ɣ] but approximant. Try an unrounded [w]. Also try producing a very slurred [g]. Spanish \"lago\" lake.",
     words: ['Spanish "agua" (very relaxed g)'],
-    audioPrompts: ['Voiced velar approximant']
   },
   {
     id: 'C056',
     symbol: 'l',
     category: 'consonant',
     label: 'Voiced alveolar lateral approximant',
+    pronunciationTip: "Tongue tip makes contact with alveolar ridge. Sides of the tongue lowered to allow lateral escape.",
     words: ['let', 'fully', 'all'],
-    audioPrompts: ['Voiced alveolar lateral approximant']
   },
   {
     id: 'C057',
     symbol: 'ɭ',
     category: 'consonant',
     label: 'Voiced retroflex lateral approximant',
+    pronunciationTip: "Tongue tip curled and underside makes post-alveolar contact. Sides of the tongue lowered to allow lateral escape. E.g. Norwegian \"farlig\" dangerous.",
     words: ['Swedish "sorl"'],
-    audioPrompts: ['Voiced retroflex lateral approximant']
   },
   {
     id: 'C058',
     symbol: 'ʎ',
     category: 'consonant',
     label: 'Voiced palatal lateral approximant',
+    pronunciationTip: "Main body of the tongue makes contact with palate over a large area. Sides of the tongue lowered to allow lateral escape. [j] offglide often heard following release. Spanish \"calle\" road.",
     words: ['Italian "figlio" (gl)', 'Spanish "ll" (some dialects)'],
-    audioPrompts: ['Voiced palatal lateral approximant']
   },
   {
     id: 'C059',
     symbol: 'ʟ',
     category: 'consonant',
     label: 'Voiced velar lateral approximant',
+    pronunciationTip: "Tongue tip/body touches the centre of the palate, remaining part of body retracted and raised. Lower tongue sides to release air. Sounds \"dark\".",
     words: ['Melpa "pala" (velar lateral l)'],
-    audioPrompts: ['Voiced velar lateral approximant']
   },
   {
     id: 'C060',
     symbol: 'ʘ',
     category: 'consonant',
     label: 'Voiceless bilabial click',
+    pronunciationTip: "Often referred to as \"kissing sound\", remember unrounded lips and sucking movement.",
     words: ['kiss sound'],
-    audioPrompts: ['Voiceless bilabial click']
   },
   {
     id: 'C061',
     symbol: 'ǀ',
     category: 'consonant',
     label: 'Voiceless dental click',
+    pronunciationTip: "Tongue blade makes contact with alveolar ridge; tongue back is held in [k] position; followed by sucking motion.",
     words: ['tsk-tsk sound of disapproval'],
-    audioPrompts: ['Voiceless dental click']
   },
   {
     id: 'C062',
     symbol: 'ǃ',
     category: 'consonant',
     label: 'Voiceless postalveolar click',
+    pronunciationTip: "Remember English \"tut-tut\" or \"tsk-tsk\" noise made as an expression of mild annoyance. Tongue tip touches upper teeth; tongue back is held in [k] position; followed by sucking motion.",
     words: ['toy horse galloping clip-clop sound'],
-    audioPrompts: ['Voiceless postalveolar click']
   },
   {
     id: 'C063',
     symbol: 'ǂ',
     category: 'consonant',
     label: 'Voiceless palatoalveolar click',
+    pronunciationTip: "Tongue blade makes contact with post-alveolar ridge; tongue back is held in [k] position; followed by sucking motion.",
     words: ['sharp, pop sound made behind teeth'],
-    audioPrompts: ['Voiceless palatoalveolar click']
   },
   {
     id: 'C064',
     symbol: 'ǁ',
     category: 'consonant',
     label: 'Voiceless alveolar lateral click',
+    pronunciationTip: "Remember noise made to call/urge horses. Sucking motion along the centre of the tongue while side(s) pull(s) away from molar teeth.",
     words: ['horse-clicking encouragement sound (on side)'],
-    audioPrompts: ['Voiceless alveolar lateral click']
   },
   {
     id: 'C065',
     symbol: 'ɓ',
     category: 'consonant',
     label: 'Voiced bilabial implosive',
+    pronunciationTip: "Make [b] + glottal closure; lower larynx first then release bilabial closure while maintaining glottal stop.",
     words: ['Hausa "ɓere" (to shell)'],
-    audioPrompts: ['Voiced bilabial implosive']
   },
   {
     id: 'C066',
     symbol: 'ɗ',
     category: 'consonant',
     label: 'Voiced alveolar implosive',
+    pronunciationTip: "Make [d] + glottal closure; lower larynx first then release alveolar closure while maintaining glottal stop.",
     words: ['Hausa "ɗa" (son)'],
-    audioPrompts: ['Voiced alveolar implosive']
   },
   {
     id: 'C067',
     symbol: 'ʄ',
     category: 'consonant',
     label: 'Voiced palatal implosive',
+    pronunciationTip: "Make a palatal closure like [ɟ] with a simultaneous glottal closure; lower the larynx, then release the palatal closure while maintaining voicing.",
     words: ['Sindhi "ʄat-u" (illiterate)'],
-    audioPrompts: ['Voiced palatal implosive']
   },
   {
     id: 'C068',
     symbol: 'ɠ',
     category: 'consonant',
     label: 'Voiced velar implosive',
+    pronunciationTip: "Make [g] + glottal closure; lower larynx first then release velar closure while maintaining glottal stop. Gulping noise.",
     words: ['Sindhi "ɠaru" (heavy)'],
-    audioPrompts: ['Voiced velar implosive']
   },
   {
     id: 'C069',
     symbol: 'ʛ',
     category: 'consonant',
     label: 'Voiced uvular implosive',
+    pronunciationTip: "Make a uvular closure like [ɢ] with a simultaneous glottal closure; lower the larynx, then release the uvular closure while maintaining voicing.",
     words: ['Mam "ʛoba" (water)'],
-    audioPrompts: ['Voiced uvular implosive']
   },
   {
     id: 'C070',
     symbol: 'ʍ',
     category: 'consonant',
     label: 'Voiceless labial-velar fricative',
+    pronunciationTip: "Lips rounded and forming narrow constriction, causing friction; back of tongue approximates velar region. Voiceless. E.g. Scottish English what.",
     words: ['traditional pronunciation of "which" vs "witch"'],
-    audioPrompts: ['Voiceless labial-velar fricative']
   },
   {
     id: 'C071',
     symbol: 'w',
     category: 'consonant',
     label: 'Voiced labial-velar approximant',
+    pronunciationTip: "Lips rounded and approximated; back of tongue approximates velar region. Voiced. Same vocal tract shape as [u] but only held momentarily . E.g. English wood.",
     words: ['wet', 'away', 'always'],
-    audioPrompts: ['Voiced labial-velar approximant']
   },
   {
     id: 'C072',
     symbol: 'ɥ',
     category: 'consonant',
     label: 'Voiced labial-palatal approximant',
+    pronunciationTip: "Lips rounded and approximated; front (main body) of tongue approximated palate. Voiced. Same vocal tract shape as [y] but only held momentarily. Similar to French \"huit\" eight",
     words: ['French "huit"'],
-    audioPrompts: ['Voiced labial-palatal approximant']
   },
   {
     id: 'C073',
     symbol: 'ʜ',
     category: 'consonant',
     label: 'Voiceless epiglottal fricative',
+    pronunciationTip: "Might be regarded as a voiceless vowel.",
     words: ['Agul "ʜat" (dry)'],
-    audioPrompts: ['Voiceless epiglottal fricative']
   },
   {
     id: 'C074',
     symbol: 'ʢ',
     category: 'consonant',
     label: 'Voiced epiglottal fricative',
+    pronunciationTip: "Might be regarded as a voiceless vowel.",
     words: ['Arabic epiglottal realization'],
-    audioPrompts: ['Voiced epiglottal fricative']
   },
   {
     id: 'C075',
     symbol: 'ʡ',
     category: 'consonant',
     label: 'Voiceless epiglottal plosive',
+    pronunciationTip: "Glottal closure. Try coughing or flicking finger just above larynx to feel place of articulation and hear a note or pitch.",
     words: ['Amis "ʡem" (dense)'],
-    audioPrompts: ['Voiceless epiglottal plosive']
   },
   {
     id: 'C076',
     symbol: 'ɕ',
     category: 'consonant',
     label: 'Voiceless alveolo-palatal fricative',
+    pronunciationTip: "Start with [i], devoice, then raise tongue to narrow the constriction channel. E.g. German \"ich\", English human.",
     words: ['Swedish "sj-sound" (some dialects)', 'Mandarin "xi"'],
-    audioPrompts: ['Voiceless alveolo-palatal fricative']
   },
   {
     id: 'C077',
     symbol: 'ʑ',
     category: 'consonant',
     label: 'Voiced alveolo-palatal fricative',
+    pronunciationTip: "Start with [i], devoice, then raise tongue to narrow the constriction channel. E.g. German \"ich\", English human.",
     words: ['Polish "źrebię" (foal)'],
-    audioPrompts: ['Voiced alveolo-palatal fricative']
   },
   {
     id: 'C078',
     symbol: 'ɺ',
     category: 'consonant',
     label: 'Voiced alveolar lateral flap',
+    pronunciationTip: "Flick the tongue tip against the alveolar ridge while allowing the air to escape laterally around the tongue.",
     words: ['Japanese "r" (often lateral flap realization)'],
-    audioPrompts: ['Voiced alveolar lateral flap']
   },
 
   // VOWELS
@@ -633,224 +637,224 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'i',
     category: 'vowel',
     label: 'Close front unrounded vowel',
+    pronunciationTip: "Tongue body high against the palate, tip touching lower teeth, jaw fairly closed, spread lips. Higher tongue position would lead to a palatal fricative. Similar to English bead; French \"si\" yes.",
     words: ['see', 'heat', 'receive'],
-    audioPrompts: ['The close front unrounded vowel sound i', 'Pronounce i as in see']
   },
   {
     id: 'V080',
     symbol: 'y',
     category: 'vowel',
     label: 'Close front rounded vowel',
+    pronunciationTip: "Tongue front high against the palate, tip touching lower teeth, jaw fairly closed, closely rounded lips Similar to French \"lune\" moon.",
     words: ['French "tu"', 'German "über"'],
-    audioPrompts: ['Close front rounded vowel']
   },
   {
     id: 'V081',
     symbol: 'ɪ',
     category: 'vowel',
     label: 'Near-close near-front unrounded vowel',
+    pronunciationTip: "Tongue in similar position to [i] but lax. English has a short version, e.g. bit. Needs to be prolonged if aiming for cardinal target.",
     words: ['bit', 'silly', 'injury'],
-    audioPrompts: ['Near-close near-front unrounded vowel']
   },
   {
     id: 'V082',
     symbol: 'ʏ',
     category: 'vowel',
     label: 'Near-close near-front rounded vowel',
+    pronunciationTip: "Use a lax near-front tongue position similar to [ɪ], with rounded lips.",
     words: ['German "hübsch"', 'Swedish "lynne"'],
-    audioPrompts: ['Near-close near-front rounded vowel']
   },
   {
     id: 'V083',
     symbol: 'e',
     category: 'vowel',
     label: 'Close-mid front unrounded vowel',
+    pronunciationTip: "Tongue body in mid-high position, tip tucked behind lower teeth, jaw is a step down from [i], spread lips. Similar to French \"thé\" tea; Yorkshire mate.",
     words: ['French "café"', 'Spanish "bebé"'],
-    audioPrompts: ['Close-mid front unrounded vowel']
   },
   {
     id: 'V084',
     symbol: 'ø',
     category: 'vowel',
     label: 'Close-mid front rounded vowel',
+    pronunciationTip: "Tongue front in mid-close position, tip touching lower teeth, jaw is a step down from [y], rounded lips. Similar to French \"le\" the.",
     words: ['French "feu"', 'German "schön"'],
-    audioPrompts: ['Close-mid front rounded vowel']
   },
   {
     id: 'V085',
     symbol: 'ɛ',
     category: 'vowel',
     label: 'Open-mid front unrounded vowel',
+    pronunciationTip: "Tongue body in mid-low position, tip touching lower teeth, jaw is a step down from [e], spread/ unrounded lips. Similar to French \"lait\" ugly; English head.",
     words: ['bet', 'head', 'many'],
-    audioPrompts: ['Open-mid front unrounded vowel']
   },
   {
     id: 'V086',
     symbol: 'œ',
     category: 'vowel',
     label: 'Open-mid front rounded vowel',
+    pronunciationTip: "Tongue front in mid-open position, tip touching lower teeth, jaw is a step down from [ø], lips have relatively open-rounding. Similar to French \"neuf\" nine.",
     words: ['French "jeune"', 'German "Hölle"'],
-    audioPrompts: ['Open-mid front rounded vowel']
   },
   {
     id: 'V087',
     symbol: 'æ',
     category: 'vowel',
     label: 'Near-open front unrounded vowel',
+    pronunciationTip: "Tongue body in low position, tip touching lower teeth, jaw as open as possible, unrounded. Similar to English tap; French \"patte\" paw.",
     words: ['bat', 'laugh', 'had'],
-    audioPrompts: ['Near-open front unrounded vowel']
   },
   {
     id: 'V088',
     symbol: 'a',
     category: 'vowel',
     label: 'Open front unrounded vowel',
+    pronunciationTip: "Tongue body in low position, tip touching lower teeth, jaw as open as possible, unrounded. Similar to English tap; French \"patte\" paw.",
     words: ['Spanish "casa"', 'French "patte"'],
-    audioPrompts: ['Open front unrounded vowel']
   },
   {
     id: 'V089',
     symbol: 'ɶ',
     category: 'vowel',
     label: 'Open front rounded vowel',
+    pronunciationTip: "Use a low front tongue position with the jaw open and the lips rounded; this vowel is uncommon in the world’s languages.",
     words: ['Bavarian "Såst" (some dialects)'],
-    audioPrompts: ['Open front rounded vowel']
   },
   {
     id: 'V090',
     symbol: 'ɨ',
     category: 'vowel',
     label: 'Close central unrounded vowel',
+    pronunciationTip: "Tongue high and slightly retracted (halfway between [i] and [ɯ]), unrounded. Russian \"CbIH\" son.",
     words: ['Russian "było"', 'Welsh "tyn"'],
-    audioPrompts: ['Close central unrounded vowel']
   },
   {
     id: 'V091',
     symbol: 'ʉ',
     category: 'vowel',
     label: 'Close central rounded vowel',
+    pronunciationTip: "Tongue high and slightly retracted (halfway between [y] and [u]), rounded. Similar to current English /u/ in many accents and Scottish English book, look.",
     words: ['Swedish "ut"', 'Norwegian "hus"'],
-    audioPrompts: ['Close central rounded vowel']
   },
   {
     id: 'V092',
     symbol: 'ɘ',
     category: 'vowel',
     label: 'Close-mid central unrounded vowel',
+    pronunciationTip: "Use a mid-high central tongue position with spread or neutral lips, between [e] and [ə].",
     words: ['Australian English "mate" second part'],
-    audioPrompts: ['Close-mid central unrounded vowel']
   },
   {
     id: 'V093',
     symbol: 'ɵ',
     category: 'vowel',
     label: 'Close-mid central rounded vowel',
+    pronunciationTip: "Use a mid-high central tongue position with rounded lips, between [ø] and [o].",
     words: ['Swedish "dur" (central realization)'],
-    audioPrompts: ['Close-mid central rounded vowel']
   },
   {
     id: 'V094',
     symbol: 'ə',
     category: 'vowel',
     label: 'Mid central unrounded vowel',
+    pronunciationTip: "Tongue in neutral position. Similar to the second vowel in upper.",
     words: ['about (first syllable)', 'sofa (last syllable)'],
-    audioPrompts: ['The mid central unrounded vowel (schwa)']
   },
   {
     id: 'V095',
     symbol: 'ɜ',
     category: 'vowel',
     label: 'Open-mid central unrounded vowel',
+    pronunciationTip: "Long version of schwa but slightly more anterior. Similar to English bird.",
     words: ['bird', 'word (standard British RP)'],
-    audioPrompts: ['Open-mid central unrounded vowel']
   },
   {
     id: 'V096',
     symbol: 'ɞ',
     category: 'vowel',
     label: 'Open-mid central rounded vowel',
+    pronunciationTip: "Use a mid-low central tongue position with rounded lips.",
     words: ['Irish "tomhas" (some dialects)'],
-    audioPrompts: ['Open-mid central rounded vowel']
   },
   {
     id: 'V097',
     symbol: 'ɐ',
     category: 'vowel',
     label: 'Near-open central unrounded vowel',
+    pronunciationTip: "Use a near-open central tongue position with unrounded lips, between [a] and [ə].",
     words: ['butter (standard British RP last syllable)'],
-    audioPrompts: ['Near-open central unrounded vowel']
   },
   {
     id: 'V098',
     symbol: 'ɯ',
     category: 'vowel',
     label: 'Close back unrounded vowel',
+    pronunciationTip: "Tongue retracted, jaw mid-close, unrounded. Aim for [u] but spread lips. Take care to keep the same tongue position as for [u]. Similar to Japanese \"uta\".",
     words: ['Korean "eum" (으)', 'Turkish "ılık"'],
-    audioPrompts: ['Close back unrounded vowel']
   },
   {
     id: 'V099',
     symbol: 'u',
     category: 'vowel',
     label: 'Close back rounded vowel',
+    pronunciationTip: "Tongue retracted and raised against velum, lips rounded and protruded. Try whistling/blowing; try with a preceding [w]. Do NOT aim for your English /u/ which may be fronted for many of you. Similar to French \"vous\" you; traditional Yorkshire boot; Spanish \"luna\" moon.",
     words: ['too', 'blue', 'group'],
-    audioPrompts: ['The close back rounded vowel sound u']
   },
   {
     id: 'V100',
     symbol: 'ʊ',
     category: 'vowel',
     label: 'Near-close near-back rounded vowel',
+    pronunciationTip: "Back rounded lax vowel. Similar to Standard English put; book, etc. Or Northern English bus.",
     words: ['put', 'could', 'foot'],
-    audioPrompts: ['Near-close near-back rounded vowel']
   },
   {
     id: 'V101',
     symbol: 'ɤ',
     category: 'vowel',
     label: 'Close-mid back unrounded vowel',
+    pronunciationTip: "Tongue retracted, jaw mid-close, unrounded. Aim for [o] but spread lips. Vietnamese \"to\" silk.",
     words: ['Mandarin "ge" (brother)', 'Irish "Uladh"'],
-    audioPrompts: ['Close-mid back unrounded vowel']
   },
   {
     id: 'V102',
     symbol: 'o',
     category: 'vowel',
     label: 'Close-mid back rounded vowel',
+    pronunciationTip: "Tongue retracted, jaw mid-close, fully rounded lips. Similar to French \"eau\" water; Scottish English coat.",
     words: ['French "eau"', 'Spanish "ojo"'],
-    audioPrompts: ['Close-mid back rounded vowel']
   },
   {
     id: 'V103',
     symbol: 'ʌ',
     category: 'vowel',
     label: 'Open-mid back unrounded vowel',
+    pronunciationTip: "Tongue retracted, jaw mid-open, unrounded. Short version similar to SSBE English bus.",
     words: ['but', 'tough', 'son'],
-    audioPrompts: ['Open-mid back unrounded vowel (wedge / caret)']
   },
   {
     id: 'V104',
     symbol: 'ɔ',
     category: 'vowel',
     label: 'Open-mid back rounded vowel',
+    pronunciationTip: "Tongue retracted, jaw mid-open, lips have a \"goldfish\" shape. Similar to Southern Standard British English law.",
     words: ['bought', 'saw', 'caught'],
-    audioPrompts: ['Open-mid back rounded vowel']
   },
   {
     id: 'V105',
     symbol: 'ɑ',
     category: 'vowel',
     label: 'Open back unrounded vowel',
+    pronunciationTip: "Tongue retracted, tip loses contact with lower teeth, jaw as open as possible, unrounded. Similar to English calm.",
     words: ['father', 'bra', 'calm'],
-    audioPrompts: ['Open back unrounded vowel (script a)']
   },
   {
     id: 'V106',
     symbol: 'ɒ',
     category: 'vowel',
     label: 'Open back rounded vowel',
+    pronunciationTip: "Tongue retracted, tip loses contact with lower teeth, jaw as open as possible, slightly rounded. Similar to SSBE cot and Geordie car.",
     words: ['lot', 'bother', 'wash (standard UK English)'],
-    audioPrompts: ['Open back rounded vowel']
   },
 
   // DIACRITICS

@@ -33,8 +33,10 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
       nextPrompt = newFeatures[0];
     }
     
-    if (!newFeatures.includes(nextMasked) || nextMasked === IPAFeature.SOUND) {
-      nextMasked = newFeatures.find(f => f !== IPAFeature.SOUND && f !== nextPrompt) || newFeatures.find(f => f !== IPAFeature.SOUND) || newFeatures[0];
+    if (!newFeatures.includes(nextMasked) || nextMasked === IPAFeature.SOUND || nextMasked === IPAFeature.EXAMPLES) {
+      nextMasked = newFeatures.find(f => f !== IPAFeature.SOUND && f !== IPAFeature.EXAMPLES && f !== nextPrompt)
+        || newFeatures.find(f => f !== IPAFeature.SOUND && f !== IPAFeature.EXAMPLES)
+        || newFeatures[0];
     }
 
     onUpdate({ ...settings, activeFeatures: newFeatures, promptFeature: nextPrompt, maskedFeature: nextMasked });
@@ -47,13 +49,15 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
   const setPrompt = (f: IPAFeature) => {
     let nextMasked = settings.maskedFeature;
     if (f === nextMasked) {
-      nextMasked = settings.activeFeatures.find(feat => feat !== f && feat !== IPAFeature.SOUND) || settings.activeFeatures[0];
+      nextMasked = settings.activeFeatures.find(feat => feat !== f && feat !== IPAFeature.SOUND && feat !== IPAFeature.EXAMPLES)
+        || settings.activeFeatures.find(feat => feat !== f && feat !== IPAFeature.SOUND)
+        || settings.activeFeatures[0];
     }
     onUpdate({ ...settings, promptFeature: f, maskedFeature: nextMasked });
   };
 
   const setMasked = (f: IPAFeature) => {
-    if (f === IPAFeature.SOUND) return; 
+    if (f === IPAFeature.SOUND || f === IPAFeature.EXAMPLES) return;
     let nextPrompt = settings.promptFeature;
     if (f === nextPrompt) {
       nextPrompt = settings.activeFeatures.find(feat => feat !== f) || settings.activeFeatures[0];
@@ -164,7 +168,7 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
               </h3>
               <div className="flex flex-col gap-1.5">
                 {settings.activeFeatures
-                  .filter(f => f !== IPAFeature.SOUND)
+                  .filter(f => f !== IPAFeature.SOUND && f !== IPAFeature.EXAMPLES)
                   .map((f) => (
                   <button
                     key={f}
@@ -175,7 +179,7 @@ export const SettingsOverlay: React.FC<SettingsOverlayProps> = ({
                         : 'bg-white border-slate-100 text-slate-400 hover:border-slate-200'
                     }`}
                   >
-                    {f === IPAFeature.EXAMPLES ? 'E.g.' : f}
+                    {f}
                   </button>
                 ))}
               </div>

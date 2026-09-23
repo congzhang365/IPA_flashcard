@@ -2,17 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').then(
-      (registration) => {
-        console.log('SW registered:', registration.scope);
-        // Force update check to fetch the latest Network-First sw.js
-        registration.update();
-      },
-      (err) => console.log('SW registration failed:', err)
-    );
+// The app previously registered a hand-written worker during development.
+// Remove that stale worker locally so it cannot serve an old audio service or
+// cached application bundle. This branch is omitted from production builds.
+if (import.meta.env.DEV && 'serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.map((registration) => registration.unregister()));
   });
 }
 
