@@ -1,12 +1,14 @@
 
-const CACHE_NAME = 'ipa-master-v2';
+const CACHE_NAME = 'ipa365-flashcards-v5';
 const ASSETS = [
-  '/',
-  '/index.html',
-  '/index.tsx',
-  '/manifest.json',
-  '/data/ipaData.ts',
-  '/types.ts'
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.png',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-512-maskable.png',
+  './fonts/DoulosSIL-Regular.woff2',
 ];
 
 self.addEventListener('install', (event) => {

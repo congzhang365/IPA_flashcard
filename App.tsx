@@ -117,6 +117,7 @@ const App: React.FC = () => {
 
   const [studyQueue, setStudyQueue] = useState<string[]>([]);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [installMessage, setInstallMessage] = useState('');
   
   const [cardState, setCardState] = useState<CardState>({
     currentQueueIndex: 0,
@@ -216,17 +217,24 @@ const App: React.FC = () => {
     const handler = (e: any) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      setInstallMessage('');
     };
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      setInstallMessage('This browser does not provide an automatic install prompt. Use the browser menu and choose “Install app” or “Add to Home Screen”.');
+      return;
+    }
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
+      setInstallMessage('IPA365 Flashcards was added to your home screen.');
+    } else {
+      setInstallMessage('Installation was cancelled. You can try again whenever you are ready.');
     }
   };
 
@@ -948,7 +956,9 @@ const App: React.FC = () => {
           onUpdate={setSettings}
           onClose={() => setIsSettingsOpen(false)}
           onReset={resetAll}
-          onInstall={deferredPrompt ? handleInstallClick : undefined}
+          onInstall={handleInstallClick}
+          installAvailable={Boolean(deferredPrompt)}
+          installMessage={installMessage}
         />
       )}
     </div>
