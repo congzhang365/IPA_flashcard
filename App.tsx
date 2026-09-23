@@ -782,13 +782,13 @@ const handleInstallClick = async () => {
               </p>
               <ul className="space-y-2 pl-1.5 border-l-2 border-primary/20">
                 <li>
-                  <span className="font-bold text-slate-800">Two features:</span> a classic flashcard. Tap the card to flip between the prompt and answer.
+                  <span className="font-bold text-slate-800">Flash card mode:</span> With two features active, the app uses a classic flashcard view. Tap the card to flip between the prompt and answer.
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">Three or more features:</span> a folded card with a tab for each view. Tap a tab or swipe left/right to browse.
+                  <span className="font-bold text-slate-800">Tabbed card mode:</span> With three or more features enabled, each view appears in its own tab. Tap a tab or swipe left or right to browse.
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">Quiz mode:</span> type or select your answer, then submit it for automatic marking and stars.
+                  <span className="font-bold text-slate-800">Quiz mode:</span> Type your answer, then submit it for automatic marking and earn stars.
                 </li>
               </ul>
             </div>
@@ -820,10 +820,10 @@ const handleInstallClick = async () => {
                   <span className="font-bold text-slate-800">LABEL:</span> Three-term labels (e.g., <span className="italic">Voiced dental fricative</span>).
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">SOUND:</span> An audio of the IPA symbol [currently under development, but will be available in the next version].
+                  <span className="font-bold text-slate-800">SOUND:</span> Audio is available for all vowels and most consonants. Diacritics and non-pulmonic consonants are to be added.
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">EXAMPLES (E.g.):</span> Illustrative word examples demonstrating the sound or pronunciation tips.
+                  <span className="font-bold text-slate-800">EXAMPLES (E.g.):</span> Illustrative word examples demonstrating the sound and/or pronunciation tips.
                 </li>
               </ul>
             </div>
@@ -838,13 +838,11 @@ const handleInstallClick = async () => {
               <h3 className="font-bold text-slate-800 text-sm">Quiz & Review: Grading and History</h3>
             </div>
             <div className="text-xs text-slate-500 leading-relaxed space-y-2">
-              <p>Quiz answers are marked automatically and your score is shown as stars. A fully correct answer earns <span className="font-bold text-slate-800">1 star</span>; a partial answer earns <span className="font-bold text-slate-800">half a star</span>.</p>
+              <p>Quiz answers are marked automatically. A fully correct answer earns <span className="font-bold text-slate-800">1 star</span>; a partial answer earns <span className="font-bold text-slate-800">half a star</span>.</p>
               <ul className="space-y-1.5 pl-1.5 border-l-2 border-primary/20">
-                <li><span className="font-bold text-slate-800">IPA symbols:</span> The symbol must match. Length marks are accepted flexibly.</li>
-                <li><span className="font-bold text-slate-800">Three-term labels:</span> All three matching terms earn 1 star; two matching terms earn half a star; fewer than two earn none.</li>
-                <li><span className="font-bold text-slate-800">Examples:</span> The answer must match one of the listed examples.</li>
+                <li><span className="font-bold text-slate-800">IPA symbols:</span> An exact match earns 1 star; a different symbol with two labels matching the target earns half a star.</li>
+                <li><span className="font-bold text-slate-800">Three-term labels:</span> Matching all labels earns 1 star; exactly one term different or missing earns half a star.</li>
               </ul>
-              <p>In review mode, use the feedback buttons after revealing the answer:</p>
               <div className="grid grid-cols-3 gap-2 text-center text-[10px] uppercase font-bold mt-1">
                 <div className="bg-green-50 border border-green-100 text-green-500 rounded-xl py-2 px-1 flex flex-col items-center gap-1">
                   <Check className="w-4 h-4" /><span>Yes</span><span className="text-[8px] font-normal lowercase text-green-500">archived from deck</span>
