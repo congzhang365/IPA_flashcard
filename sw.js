@@ -1,5 +1,14 @@
-const CACHE_NAME = 'ipa365-flashcards-v3';
-const APP_SHELL = ['./', './index.html', './manifest.json', './favicon.png'];
+const CACHE_NAME = 'ipa365-flashcards-v5';
+const APP_SHELL = [
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.png',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-512-maskable.png',
+  './fonts/DoulosSIL-Regular.woff2',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
