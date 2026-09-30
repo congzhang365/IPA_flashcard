@@ -4,8 +4,8 @@ Master the International Phonetic Alphabet with this free, interactive flashcard
 
 Access it here: https://congzhang365.github.io/IPA_flashcard/
 
-> [!NOTE]  
-> This is a beta version. Some functions are to be finalised.
+Full tutorial: https://congzhang-linguist.github.io/resources/ipa365-tutorial/
+
 
 ---
 

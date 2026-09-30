@@ -78,7 +78,6 @@ const SPACING_MARKS = new Set([
   'ʼ',
   'ː',
   'ˑ',
-  '˘',
 ]);
 
 interface DiacriticExampleProps {
@@ -284,6 +283,11 @@ export const DiacriticExample: React.FC<DiacriticExampleProps> = ({
    *    grey base + dark combining diacritic,
    * while retaining the font's natural diacritic positioning.
    */
+  // U+02D8 is a spacing breve, but its visual placement is above the
+  // carrier. Render the equivalent combining breve for stable attachment,
+  // while keeping ˘ as the underlying quiz symbol.
+  const visualSymbol = symbol === '˘' ? '̆' : symbol;
+
   return (
     <span
       className={`ipa-font relative inline-block whitespace-nowrap leading-none ${className}`}
@@ -295,7 +299,7 @@ export const DiacriticExample: React.FC<DiacriticExampleProps> = ({
           color: '#1e293b',
         }}
       >
-        {base}{symbol}
+        {base}{visualSymbol}
       </span>
 
       {/* Grey copy of the base over the dark base */}

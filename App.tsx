@@ -9,7 +9,7 @@ import { KeyboardGroup } from './components/IPAKKeyboard';
 import { SettingsOverlay } from './components/SettingsOverlay';
 import { gradeQuizAnswer } from './services/quizGrading';
 import { hasBundledAudio } from './services/audioService';
-import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X } from 'lucide-react';
+import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X, ExternalLink } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
 const IPAAppCredits: React.FC = () => (
@@ -761,11 +761,22 @@ const handleInstallClick = async () => {
         </main>
       ) : (
         <main className="w-full flex-grow flex flex-col items-center justify-start py-6 gap-5 animate-in fade-in slide-in-from-right duration-300 overflow-y-auto pb-8 scrollbar-hide">
-          <div className="w-full flex items-center gap-3 mb-1 px-2">
+          <div className="w-full flex items-center justify-between gap-3 mb-1 px-2">
+            <div className="flex items-center gap-3">
             <div className="bg-secondary/10 p-2.5 rounded-2xl animate-pulse">
               <BookOpen className="w-5 h-5 text-secondary" />
             </div>
             <h2 className="text-xl font-bold text-slate-800 tracking-tight">How to Study</h2>
+            </div>
+            <a
+              href="https://congzhang-linguist.github.io/resources/ipa365-tutorial/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open the full IPA365 tutorial"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-secondary/20 bg-secondary/10 px-3 py-2 text-[10px] font-black uppercase tracking-wider text-secondary transition-all hover:bg-secondary/20 active:scale-95"
+            >
+              Full tutorial <ExternalLink className="h-3.5 w-3.5" />
+            </a>
           </div>
 
           {/* How a study session works */}

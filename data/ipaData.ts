@@ -80,7 +80,7 @@ export const ipaDataset: IPACardData[] = [
   },
   {
     id: 'C010',
-    symbol: 'g',
+    symbol: 'ɡ',
     category: 'consonant',
     label: 'Voiced velar plosive',
     pronunciationTip: "Tongue back raised towards the velum. Remember this is unaspirated, try sky with a silent /s/.",
@@ -1115,7 +1115,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: '˘',
     category: 'diacritic',
     label: 'extra-short',
-    words: ['Syllable made extra brief / transient (e.g., a˘)']
+    words: ['Syllable made extra brief / transient (e.g., ˘a)']
   },
   {
     id: 'D147A',
