@@ -1,0 +1,9 @@
+.pronunciation-content { width: 100%; min-width: 0; overflow-wrap: anywhere; font-family: inherit; font-size: 14px; line-height: 1.65; color: #455e70; }
+.pronunciation-content .pronunciation-tip { margin: 0; }
+.pronunciation-content .pronunciation-example-row { margin: 10px 0 0; }
+.pronunciation-content em { font-style: italic; }
+.pronunciation-ipa { font-family: 'Doulos SIL', 'Gentium Plus', serif; font-style: normal; font-weight: 400; }
+.pronunciation-content--compact { max-height: 230px; overflow-y: auto; overscroll-behavior: contain; padding: 3px 5px 12px; font-size: 13px; line-height: 1.65; }
+.pronunciation-content--compact .pronunciation-tip { padding: 11px 13px; border-radius: 13px; background: #eff8f8; }
+.pronunciation-content--compact .pronunciation-example-row { padding: 0 6px; }
+@media (max-width: 360px) { .pronunciation-content--compact { font-size: 12px; max-height: 210px; } }

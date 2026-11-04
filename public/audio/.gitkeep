@@ -1,4 +1,5 @@
 # Ready for custom IPA audio files (.mp3)
 # To use your custom audios:
-# 1. Name the files using either the symbol (e.g., p.mp3, a.mp3) or the item ID (e.g., C001.mp3, V001.mp3, D001.mp3).
-# 2. Drop them directly into this folder!
+# 1. Keep existing filenames. Use the stable sound/card ID (e.g., C001.mp3 or V079.mp3).
+# 2. Add genuine MP3s here and restart Vite (or rebuild) to refresh availability.
+# 3. Record the source, author and licence. See ATTRIBUTION.md for this release.

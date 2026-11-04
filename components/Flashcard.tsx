@@ -1,9 +1,10 @@
 import React from 'react';
 import { IPAFeature, IPACardData, LearningStatus } from '../types';
-import { Volume2, CheckCircle, XCircle, HelpCircle, Check, X } from 'lucide-react';
-import { playIPASound } from '../services/audioService';
+import { CheckCircle, XCircle, HelpCircle, Check, X } from 'lucide-react';
+import { AudioButton } from './AudioButton';
 import { IPAKeyboard, KeyboardGroup } from './IPAKKeyboard';
 import { DiacriticExample } from './DiacriticExample';
+import { PronunciationContent, PronunciationLabel } from './PronunciationContent';
 
 interface FlashcardProps {
   data: IPACardData;
@@ -28,36 +29,16 @@ const FeatureContent: React.FC<{ feature: IPAFeature; data: IPACardData }> = ({ 
         ? <DiacriticExample symbol={data.symbol} className="text-8xl font-bold" />
         : <div className="ipa-font text-8xl font-bold text-slate-800">{data.symbol}</div>;
     case IPAFeature.LABEL:
-      return <div className="text-2xl font-semibold text-slate-700 text-center px-4 leading-snug">{data.label}</div>;
+      return <div className="text-2xl font-semibold text-slate-700 text-center px-4 leading-snug"><PronunciationLabel card={data} /></div>;
     case IPAFeature.EXAMPLES:
       return (
         <div className="flex max-h-[230px] w-full flex-col items-center gap-2 overflow-y-auto px-1">
           <span className="text-sm uppercase tracking-widest text-slate-400 mb-2 font-bold">Examples</span>
-          {data.pronunciationTip && (
-            <p className="max-w-[290px] rounded-xl bg-amber-50 px-4 py-3 text-sm leading-relaxed text-slate-600 text-center break-words">
-              {data.pronunciationTip}
-            </p>
-          )}
-          {data.words && data.words.length > 0 ? (
-            data.words.slice(0, data.pronunciationTip ? 1 : 3).map((w, i) => (
-              <span key={i} className="text-xl font-medium text-slate-700 text-center px-4">
-                {typeof w === 'string' ? w : <>{w.word}{w.ipa && <span className="ml-2 text-slate-500">{w.ipa}</span>}</>}
-              </span>
-            ))
-          ) : (
-            <span className="text-slate-400 italic text-xs text-center px-4">No examples (diacritic modifier)</span>
-          )}
+          <PronunciationContent card={data} compact />
         </div>
       );
     case IPAFeature.SOUND:
-      return (
-        <button 
-          onClick={(e) => { e.stopPropagation(); playIPASound(data.id, data.symbol); }}
-          className="p-8 bg-primary/10 rounded-full hover:bg-primary/20 transition-colors group"
-        >
-          <Volume2 className="w-16 h-16 text-primary group-hover:scale-110 transition-transform" />
-        </button>
-      );
+      return <AudioButton data={data} />;
     default:
       return null;
   }
@@ -94,7 +75,7 @@ export const Flashcard: React.FC<FlashcardProps> = ({
                   type="text"
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-primary outline-none text-center text-xl font-bold bg-slate-50 shadow-inner"
+                  className={`w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-primary outline-none text-center text-xl font-bold bg-slate-50 shadow-inner${maskedFeature === IPAFeature.SYMBOL ? ' ipa-font' : ''}`}
                   placeholder="???"
                 />
                 {maskedFeature === IPAFeature.SYMBOL && data.category === 'diacritic' && (

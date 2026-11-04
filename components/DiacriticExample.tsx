@@ -78,6 +78,7 @@ const SPACING_MARKS = new Set([
   'ʼ',
   'ː',
   'ˑ',
+  '˥', '˦', '˧', '˨', '˩', '˩˥', '˥˩', '˧˥', '˩˧', '˧˦˨',
 ]);
 
 interface DiacriticExampleProps {
@@ -133,6 +134,9 @@ export const DiacriticExample: React.FC<DiacriticExampleProps> = ({
   symbol,
   className = '',
 }) => {
+  if (symbol === '↗' || symbol === '↘') {
+    return <span className={`ipa-font inline-block leading-none text-slate-800 ${className}`}>{symbol}</span>;
+  }
   const base = BASE_BY_DIACRITIC[symbol] ?? 'a';
 
   const example = PRE_VOWEL.has(symbol)

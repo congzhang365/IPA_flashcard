@@ -1,19 +1,20 @@
 import { IPACardData } from '../types';
+import { additionalToneCards } from './toneData';
+import { additionalConsonants } from './additionalConsonants';
 
 export const ipaDataset: IPACardData[] = [
   // CONSONANTS
   {
-    id: 'C001',
-    symbol: 'p',
-    category: 'consonant',
-    label: 'Voiceless bilabial plosive',
-    pronunciationTip: 'Lips come together then apart for the vowel. Remember this is unaspirated; try spark with a silent /s/.',
-    words: [
-      { word: 'pat', ipa: '/pæt/' },
-      { word: 'apple', ipa: '/ˈæpəl/' },
-      { word: 'stop', ipa: '/stɒp/' },
-    ],
-  },
+  id: 'C001',
+  symbol: 'p',
+  category: 'consonant',
+  label: 'Voiceless bilabial plosive',
+  pronunciationTip: 'Bring both lips together to block the airflow, then release them. Unaspirated [p] has little or no puff of air after release, as in the "p" in "spin" [spɪn]. The aspirated version [pʰ] has a noticeable puff of air after release, as in "pat" [pʰæt].',
+  words: [
+    { word: 'pat', ipa: '[pʰæt]' },
+    { word: 'spin', ipa: '[spɪn]' },
+  ],
+},
   {
     id: 'C002',
     symbol: 'b',
@@ -75,7 +76,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'k',
     category: 'consonant',
     label: 'Voiceless velar plosive',
-    pronunciationTip: "Make [k] + glottal closure; raise larynx first then release velar closure while maintaining glottal stop.",
+    pronunciationTip: 'Raise the back of the tongue to the soft palate to stop the air, then release it without voicing. Aim for an unaspirated [k], as in sky without the initial /s/.',
     words: ['cat', 'bucket', 'back'],
   },
   {
@@ -83,7 +84,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɡ',
     category: 'consonant',
     label: 'Voiced velar plosive',
-    pronunciationTip: "Tongue back raised towards the velum. Remember this is unaspirated, try sky with a silent /s/.",
+    pronunciationTip: 'Make a closure between the back of the tongue and the soft palate. Keep the vocal folds vibrating through the closure and release: [ɡ].',
     words: ['go', 'bigger', 'bag'],
   },
   {
@@ -267,7 +268,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 's',
     category: 'consonant',
     label: 'Voiceless alveolar fricative',
-    pronunciationTip: "Make [s] + glottal closure; raise larynx first then release alveolar constriction while maintaining glottal stop.",
+    pronunciationTip: 'Bring the tongue tip or blade close to the alveolar ridge and form a narrow central groove. Send air through it to make hissing friction without voicing.',
     words: ['sip', 'passing', 'hiss'],
   },
   {
@@ -323,7 +324,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʝ',
     category: 'consonant',
     label: 'Voiced palatal fricative',
-    pronunciationTip: "Start with [i], then raise tongue to narrow the constriction channel until audible frication is generated. Fully voiced. E.g. Dutch \"goed\" good.",
+    pronunciationTip: 'Start with [i], then raise the front of the tongue towards the hard palate until there is audible friction. Keep voicing, as in a fricative pronunciation of Spanish y.',
     words: ['Spanish "yema" (intense)'],
   },
   {
@@ -419,7 +420,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɹ',
     category: 'consonant',
     label: 'Voiced alveolar approximant',
-    pronunciationTip: "Tongue tip/blade held loosely against alveolar ridge, creating and open approximation. Fully voiced. Similar to /r/ in many British English accents. Slight lip-rounding.",
+    pronunciationTip: 'Bring the tongue tip or blade towards the alveolar ridge without making contact or audible friction. Keep voicing. This resembles /r/ in many British English accents.',
     words: ['run', 'very (standard UK approx r)'],
   },
   {
@@ -475,7 +476,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʟ',
     category: 'consonant',
     label: 'Voiced velar lateral approximant',
-    pronunciationTip: "Tongue tip/body touches the centre of the palate, remaining part of body retracted and raised. Lower tongue sides to release air. Sounds \"dark\".",
+    pronunciationTip: 'Raise the back of the tongue to make a closure against the soft palate. Let voiced air escape around the sides of the tongue; the tongue tip need not touch the alveolar ridge.',
     words: ['Melpa "pala" (velar lateral l)'],
   },
   {
@@ -491,7 +492,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ǀ',
     category: 'consonant',
     label: 'Voiceless dental click',
-    pronunciationTip: "Tongue blade makes contact with alveolar ridge; tongue back is held in [k] position; followed by sucking motion.",
+    pronunciationTip: 'Make a front closure with the tongue tip or blade against the upper teeth and a back closure with the tongue against the velum. Lower the tongue body, then release the front closure: a dental tutting click.',
     words: ['tsk-tsk sound of disapproval'],
   },
   {
@@ -499,7 +500,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ǃ',
     category: 'consonant',
     label: 'Voiceless postalveolar click',
-    pronunciationTip: "Remember English \"tut-tut\" or \"tsk-tsk\" noise made as an expression of mild annoyance. Tongue tip touches upper teeth; tongue back is held in [k] position; followed by sucking motion.",
+    pronunciationTip: 'Make a closure at or just behind the alveolar ridge, together with a back closure at the velum. Lower the tongue body and release the front closure to make a hollow popping click.',
     words: ['toy horse galloping clip-clop sound'],
   },
   {
@@ -507,7 +508,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ǂ',
     category: 'consonant',
     label: 'Voiceless palatoalveolar click',
-    pronunciationTip: "Tongue blade makes contact with post-alveolar ridge; tongue back is held in [k] position; followed by sucking motion.",
+    pronunciationTip: 'Make a broad closure with the tongue blade against the palate and a second closure at the velum. Lower the enclosed tongue body, then release the front closure to make a sharp palatal click.',
     words: ['sharp, pop sound made behind teeth'],
   },
   {
@@ -515,7 +516,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ǁ',
     category: 'consonant',
     label: 'Voiceless alveolar lateral click',
-    pronunciationTip: "Remember noise made to call/urge horses. Sucking motion along the centre of the tongue while side(s) pull(s) away from molar teeth.",
+    pronunciationTip: 'Keep closures at the alveolar ridge and velum. Lower the tongue body and release one or both sides of the front closure, like the lateral clicking sound sometimes used to urge a horse.',
     words: ['horse-clicking encouragement sound (on side)'],
   },
   {
@@ -523,7 +524,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɓ',
     category: 'consonant',
     label: 'Voiced bilabial implosive',
-    pronunciationTip: "Make [b] + glottal closure; lower larynx first then release bilabial closure while maintaining glottal stop.",
+    pronunciationTip: 'Close both lips and maintain voicing while lowering the larynx. Then release the lips to produce the bilabial implosive; do not add a separate glottal stop.',
     words: ['Hausa "ɓere" (to shell)'],
   },
   {
@@ -531,7 +532,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɗ',
     category: 'consonant',
     label: 'Voiced alveolar implosive',
-    pronunciationTip: "Make [d] + glottal closure; lower larynx first then release alveolar closure while maintaining glottal stop.",
+    pronunciationTip: 'Make an alveolar closure with the tongue tip or blade. Maintain voicing while lowering the larynx, then release the tongue closure to produce an alveolar implosive.',
     words: ['Hausa "ɗa" (son)'],
   },
   {
@@ -539,7 +540,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʄ',
     category: 'consonant',
     label: 'Voiced palatal implosive',
-    pronunciationTip: "Make a palatal closure like [ɟ] with a simultaneous glottal closure; lower the larynx, then release the palatal closure while maintaining voicing.",
+    pronunciationTip: 'Make a palatal closure with the front of the tongue, as for [ɟ]. Lower the larynx while maintaining voicing, then release the tongue closure.',
     words: ['Sindhi "ʄat-u" (illiterate)'],
   },
   {
@@ -547,7 +548,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɠ',
     category: 'consonant',
     label: 'Voiced velar implosive',
-    pronunciationTip: "Make [g] + glottal closure; lower larynx first then release velar closure while maintaining glottal stop. Gulping noise.",
+    pronunciationTip: 'Make a closure between the back of the tongue and the soft palate, as for [ɡ]. Lower the larynx while maintaining voicing, then release the velar closure.',
     words: ['Sindhi "ɠaru" (heavy)'],
   },
   {
@@ -555,7 +556,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʛ',
     category: 'consonant',
     label: 'Voiced uvular implosive',
-    pronunciationTip: "Make a uvular closure like [ɢ] with a simultaneous glottal closure; lower the larynx, then release the uvular closure while maintaining voicing.",
+    pronunciationTip: 'Make a uvular closure like [ɢ], further back than a velar closure. Lower the larynx while maintaining voicing, then release the tongue closure.',
     words: ['Mam "ʛoba" (water)'],
   },
   {
@@ -587,7 +588,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʜ',
     category: 'consonant',
     label: 'Voiceless epiglottal fricative',
-    pronunciationTip: "Might be regarded as a voiceless vowel.",
+    pronunciationTip: 'Narrow the passage at the epiglottis and aryepiglottic folds and send voiceless air through it. Epiglottal friction may be accompanied by trilling; this is not simply [h].',
     words: ['Agul "ʜat" (dry)'],
   },
   {
@@ -595,7 +596,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʢ',
     category: 'consonant',
     label: 'Voiced epiglottal fricative',
-    pronunciationTip: "Might be regarded as a voiceless vowel.",
+    pronunciationTip: 'Narrow the passage at the epiglottis and aryepiglottic folds while keeping voicing. The production may include aryepiglottic trilling; avoid confusing it with a glottal fricative.',
     words: ['Arabic epiglottal realization'],
   },
   {
@@ -603,7 +604,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ʡ',
     category: 'consonant',
     label: 'Voiceless epiglottal plosive',
-    pronunciationTip: "Glottal closure. Try coughing or flicking finger just above larynx to feel place of articulation and hear a note or pitch.",
+    pronunciationTip: 'Make a complete closure in the epiglottal region, above the vocal folds, and release it. This is a different closure from the glottal stop [ʔ].',
     words: ['Amis "ʡem" (dense)'],
   },
   {
@@ -611,15 +612,15 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɕ',
     category: 'consonant',
     label: 'Voiceless alveolo-palatal fricative',
-    pronunciationTip: "Start with [i], devoice, then raise tongue to narrow the constriction channel. E.g. German \"ich\", English human.",
-    words: ['Swedish "sj-sound" (some dialects)', 'Mandarin "xi"'],
+    pronunciationTip: 'Raise the tongue blade just behind the alveolar ridge and the front of the tongue towards the palate. Make a narrow grooved channel for voiceless sibilant friction, as in Mandarin xi.',
+    words: ['Mandarin "xi"', 'Polish "świt"'],
   },
   {
     id: 'C077',
     symbol: 'ʑ',
     category: 'consonant',
     label: 'Voiced alveolo-palatal fricative',
-    pronunciationTip: "Start with [i], devoice, then raise tongue to narrow the constriction channel. E.g. German \"ich\", English human.",
+    pronunciationTip: 'Use the same alveolo-palatal grooved tongue position as [ɕ], but keep the vocal folds vibrating. This resembles Polish ź.',
     words: ['Polish "źrebię" (foal)'],
   },
   {
@@ -630,6 +631,8 @@ export const ipaDataset: IPACardData[] = [
     pronunciationTip: "Flick the tongue tip against the alveolar ridge while allowing the air to escape laterally around the tongue.",
     words: ['Japanese "r" (often lateral flap realization)'],
   },
+
+  ...additionalConsonants,
 
   // VOWELS
   {
@@ -677,7 +680,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ø',
     category: 'vowel',
     label: 'Close-mid front rounded vowel',
-    pronunciationTip: "Tongue front in mid-close position, tip touching lower teeth, jaw is a step down from [y], rounded lips. Similar to French \"le\" the.",
+    pronunciationTip: 'Keep the tongue front in a close-mid position and round the lips. Aim for [e] with rounded lips, as in French feu.',
     words: ['French "feu"', 'German "schön"'],
   },
   {
@@ -685,7 +688,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɛ',
     category: 'vowel',
     label: 'Open-mid front unrounded vowel',
-    pronunciationTip: "Tongue body in mid-low position, tip touching lower teeth, jaw is a step down from [e], spread/ unrounded lips. Similar to French \"lait\" ugly; English head.",
+    pronunciationTip: 'Hold the tongue front in an open-mid position with unrounded lips, lower than [e]. Similar to French lait (milk) and English head.',
     words: ['bet', 'head', 'many'],
   },
   {
@@ -701,7 +704,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'æ',
     category: 'vowel',
     label: 'Near-open front unrounded vowel',
-    pronunciationTip: "Tongue body in low position, tip touching lower teeth, jaw as open as possible, unrounded. Similar to English tap; French \"patte\" paw.",
+    pronunciationTip: 'Lower the front of the tongue to a near-open position, slightly higher than [a], with unrounded lips. Similar to the vowel of trap in accents that use [æ].',
     words: ['bat', 'laugh', 'had'],
   },
   {
@@ -765,7 +768,7 @@ export const ipaDataset: IPACardData[] = [
     symbol: 'ɜ',
     category: 'vowel',
     label: 'Open-mid central unrounded vowel',
-    pronunciationTip: "Long version of schwa but slightly more anterior. Similar to English bird.",
+    pronunciationTip: 'Hold the tongue in an open-mid central position with unrounded lips. Similar to the vowel in bird in many non-rhotic British English accents; vowel length is a separate property.',
     words: ['bird', 'word (standard British RP)'],
   },
   {
@@ -1200,5 +1203,6 @@ export const ipaDataset: IPACardData[] = [
     category: 'diacritic',
     label: 'rising-falling tone',
     words: ['Peaked rising-falling tone contour']
-  }
+  },
+  ...additionalToneCards,
 ];

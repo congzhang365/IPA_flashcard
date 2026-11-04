@@ -1,14 +1,16 @@
 import React, { useRef } from 'react';
+import { additionalToneCards } from '../data/toneData';
 
 export type KeyboardGroup = 'Consonants' | 'Vowels' | 'Diacritics';
 
-const GROUPS: Record<KeyboardGroup, string[]> = {
+export const KEYBOARD_GROUPS: Record<KeyboardGroup, string[]> = {
   Consonants: [
     'p', 'b', 'ɓ', 'ɸ', 'β', 'f', 'v', 'ⱱ', 't', 'd', 'ɗ', 'ʈ', 'ɖ', 'θ', 'ð',
     'k', 'ɡ', 'ɠ', 'q', 'ɢ', 'ʛ', 'x', 'ɣ', 'χ', 'ʁ', 'm', 'ɱ', 'n', 'ɳ', 'ɲ', 'ŋ', 'ɴ',
     's', 'z', 'ʃ', 'ʒ', 'ʂ', 'ʐ', 'ɕ', 'ʑ', 'ç', 'ʝ', 'r', 'ɾ', 'ɽ', 'ʀ', 'ʙ', 'ɺ',
     'l', 'ɬ', 'ɮ', 'ɭ', 'ʎ', 'ʟ', 'h', 'ɦ', 'ħ', 'ʕ', 'ʜ', 'ʔ', 'ʡ', 'ʢ', 'ɧ',
     'w', 'ʍ', 'ɥ', 'j', 'ɰ', 'ɹ', 'ɻ', 'ʋ', 'c', 'ɟ', 'ʄ', 'ʘ', 'ǀ', 'ǃ', 'ǂ', 'ǁ',
+    'pʼ', 'tʼ', 'kʼ', 'sʼ',
   ],
   Vowels: [
     'i', 'y', 'ɪ', 'ʏ', 'ɨ', 'ʉ', 'e', 'ə', 'ɘ', 'ɛ', 'ɜ', 'ɞ', 'o', 'ø', 'ɵ', 'ɔ', 'œ',
@@ -19,6 +21,7 @@ const GROUPS: Record<KeyboardGroup, string[]> = {
     '◌̽', '◌̩', '◌̯', '◌˞', '◌̤', '◌̰', '◌̼', '◌̪', '◌̺', '◌̻', '◌̃', '◌ⁿ', '◌ˡ',
     '◌ʷ', '◌ʲ', '◌ˠ', '◌ˤ', '◌̴', '◌̚', '◌̋', '◌́', '◌̄', '◌̀', '◌̏', '◌̌', '◌̂',
     '◌᷄', '◌᷅', '◌᷈', '◌͡', '◌͜', '◌̝', '◌̞', '◌̘', '◌̙',
+    ...additionalToneCards.map(card => card.symbol),
   ],
 };
 
@@ -50,7 +53,7 @@ export const IPAKeyboard: React.FC<IPAKeyboardProps> = ({ value, onChange, input
   return (
     <div className="w-full rounded-2xl border border-slate-100 bg-white/80 p-2 shadow-inner" onClick={e => e.stopPropagation()}>
       <div className="flex gap-1 mb-2">
-        {(Object.keys(GROUPS) as KeyboardGroup[]).map(name => (
+        {(Object.keys(KEYBOARD_GROUPS) as KeyboardGroup[]).map(name => (
           <button
             key={name}
             type="button"
@@ -64,7 +67,7 @@ export const IPAKeyboard: React.FC<IPAKeyboardProps> = ({ value, onChange, input
         ))}
       </div>
       <div className="grid max-h-28 grid-cols-8 gap-1 overflow-y-auto pr-0.5 sm:max-h-32 sm:grid-cols-10">
-        {GROUPS[group].map(symbol => (
+        {KEYBOARD_GROUPS[group].map(symbol => (
           <button
             key={symbol}
             type="button"

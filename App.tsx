@@ -7,9 +7,10 @@ import { FoldedCard } from './components/FoldedCard';
 import { FeatureIcon, featureStyles } from './components/FeatureIcon';
 import { KeyboardGroup } from './components/IPAKKeyboard';
 import { SettingsOverlay } from './components/SettingsOverlay';
+import { IPAChart } from './components/IPAChart';
 import { gradeQuizAnswer } from './services/quizGrading';
-import { hasBundledAudio } from './services/audioService';
-import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X, ExternalLink } from 'lucide-react';
+import { hasBundledAudio, stopIPASound } from './services/audioService';
+import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X, ExternalLink, Grid2X2 } from 'lucide-react';
 // Audio service is used in components, no direct import needed here
 
 const IPAAppCredits: React.FC = () => (
@@ -129,7 +130,8 @@ const App: React.FC = () => {
   });
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'study' | 'lab' | 'tutorial'>('study');
+  const [activeTab, setActiveTab] = useState<'study' | 'chart' | 'lab' | 'tutorial'>('study');
+  useEffect(() => { stopIPASound(); }, [activeTab]);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'consonant' | 'vowel' | 'diacritic'>('all');
   const [lastKeyboardGroup, setLastKeyboardGroup] = useState<KeyboardGroup>(() => {
     const saved = localStorage.getItem('ipa_keyboard_group');
@@ -578,7 +580,7 @@ const handleInstallClick = async () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-between pb-28 pt-4 px-4 max-w-md mx-auto relative select-none bg-[#fcfdfd]">
+    <div className={`min-h-screen flex flex-col items-center justify-between pb-28 pt-4 px-4 mx-auto relative select-none bg-[#fcfdfd] ${activeTab === 'chart' ? 'max-w-[1280px]' : 'max-w-md'}`}>
       
       <header className="w-full flex justify-between items-center mb-3 px-2">
         <div className="flex items-center gap-2">
@@ -722,6 +724,11 @@ const handleInstallClick = async () => {
           )}
           <IPAAppCredits />
         </main>
+       ) : activeTab === 'chart' ? (
+        <main className="w-full flex-grow py-4">
+          <IPAChart />
+          <IPAAppCredits />
+        </main>
        ) : activeTab === 'lab' ? (
         <main className="w-full flex-grow flex flex-col items-center justify-center py-8 gap-8 animate-in fade-in duration-300 px-4">
           <div className="bg-white p-10 rounded-[3rem] w-full border border-slate-100 shadow-2xl shadow-slate-200 flex flex-col items-center text-center relative overflow-hidden">
@@ -831,7 +838,7 @@ const handleInstallClick = async () => {
                   <span className="font-bold text-slate-800">LABEL:</span> Three-term labels (e.g., <span className="italic">Voiced dental fricative</span>).
                 </li>
                 <li>
-                  <span className="font-bold text-slate-800">SOUND:</span> Audio is available for all vowels and most consonants. Diacritics and non-pulmonic consonants are to be added.
+                  <span className="font-bold text-slate-800">SOUND:</span> Play available consonant and vowel recordings. Diacritic audio is not currently available.
                 </li>
                 <li>
                   <span className="font-bold text-slate-800">EXAMPLES (E.g.):</span> Illustrative word examples demonstrating the sound and/or pronunciation tips.
@@ -867,6 +874,12 @@ const handleInstallClick = async () => {
               </div>
               <p>A full-point quiz answer is removed from the deck; partial or incorrect answers return for more practice. The app keeps your three highest completed quiz scores.</p>
             </div>
+          </section>
+
+          {/* Chart instructions immediately before Reset Progress */}
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md flex flex-col gap-2.5">
+            <h3 className="font-bold text-slate-800 text-sm flex items-center gap-2"><Grid2X2 className="h-4 w-4 text-primary" />IPA Chart</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">Explore consonants, vowels, other symbols and diacritics in the Chart tab. Hover or focus for a tip. Tap a symbol to open its callout and play available audio; tap again to close. Use Replay to hear it again. Scrolling or switching tabs dismisses the callout. Diacritics show explanations only.</p>
           </section>
 
           {/* Reset Progress Card */}
@@ -980,7 +993,7 @@ const handleInstallClick = async () => {
       )}
 
       <nav className="fixed bottom-0 left-0 right-0 pb-[env(safe-area-inset-bottom,20px)] pt-4 bg-slate-900/95 backdrop-blur-xl flex justify-center items-center shadow-2xl z-40 border-t border-white/10">
-        <div className="flex justify-around w-full max-w-sm px-6">
+        <div className="flex justify-around w-full max-w-md px-3">
           <button 
             onClick={() => { triggerHaptic(); setActiveTab('study'); }}
             className={`flex flex-col items-center gap-1.5 transition-all ${activeTab === 'study' ? 'text-primary scale-110' : 'text-slate-500 hover:text-slate-300'}`}
@@ -989,6 +1002,14 @@ const handleInstallClick = async () => {
             <span className="text-[10px] font-black uppercase tracking-widest">Study</span>
           </button>
           
+          <button type="button"
+            onClick={() => { triggerHaptic(); setActiveTab('chart'); }}
+            aria-current={activeTab === 'chart' ? 'page' : undefined}
+            className={`flex flex-col items-center gap-1.5 transition-all ${activeTab === 'chart' ? 'text-primary scale-110' : 'text-slate-400 hover:text-slate-300'}`}>
+            <Grid2X2 className="w-6 h-6" />
+            <span className="text-[10px] font-black uppercase tracking-widest">Chart</span>
+          </button>
+
           <button 
             onClick={() => { triggerHaptic(); setActiveTab('tutorial'); }}
             className={`flex flex-col items-center gap-1.5 transition-all ${activeTab === 'tutorial' ? 'text-secondary scale-110' : 'text-slate-500 hover:text-slate-300'}`}

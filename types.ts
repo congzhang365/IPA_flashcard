@@ -26,6 +26,24 @@ export interface IPACardData {
 export interface WordExample {
   word: string;
   ipa?: string;
+  meaning?: string;
+  language?: string;
+  variety?: string;
+  source?: string;
+}
+
+/** Explicit text roles; the renderer never guesses IPA from punctuation. */
+export interface PronunciationPart {
+  kind: 'text' | 'ipa' | 'word';
+  text: string;
+}
+
+export interface LexicalExample extends WordExample {
+  ipa: string;
+  meaning: string;
+  language: string;
+  variety: string;
+  source: string;
 }
 
 export type StudyMode = 'FLASHCARD' | 'QUIZ';

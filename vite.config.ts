@@ -1,8 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import { readdirSync } from 'node:fs';
+import packageInfo from './package.json';
+
+// Playback and Sound-prompt filters share the actual files present at build time.
+const bundledAudioFiles = readdirSync(new URL('./public/audio/', import.meta.url))
+  .filter(name => name.toLowerCase().endsWith('.mp3')).sort();
 
 export default defineConfig({
+  define: {
+    __APP_VERSION__: JSON.stringify(packageInfo.version),
+    __BUNDLED_AUDIO_FILES__: JSON.stringify(bundledAudioFiles),
+  },
   plugins: [
     react(),
     VitePWA({
