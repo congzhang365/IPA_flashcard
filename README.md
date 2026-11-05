@@ -1,6 +1,6 @@
 # IPA365 Flashcards
 
-Current version: **v1.1.0-preview.4**. Planned stable release: **v1.1.0**. See [version history and rollback](CHANGELOG.md).
+Current local and published version: **v1.1.0-preview.9**. Planned stable release: **v1.1.0**. See [version history and rollback](CHANGELOG.md).
 
 Master the International Phonetic Alphabet with this free, interactive flashcard tool. Practice consonants, vowels, and diacritics with an efficient study mode.
 
@@ -52,6 +52,16 @@ There are **111 bundled recordings**, covering all current consonant/vowel study
 
 Cards and chart tips use the same content renderer. Lexical examples use *spelling or transliteration* /broad IPA/, 'meaning' in a named language/variety. IPA uses local Doulos SIL; prose keeps the interface font. The preview has 46 formatted lexical examples. The remaining 65 sounds show their tip while their lexical examples await review; original candidates remain in the source. [Proposed pronunciation corrections and the complete pending-example list](PRONUNCIATION_REVIEW.md) require author approval before substantive changes are applied.
 
+### 5. Give IPA365 some love
+
+The heart and **Like IPA365?** sit together in the centre without a surrounding box. Each tap releases an IPA symbol, a changing emoji and your updated running count; there is no permanent personal counter beside the button. There are **62 emoji choices**, shuffled so every choice appears before the next batch, with no consecutive repeats. Below the copyright footer, a tiny heart and number show the community total.
+
+Occasionally a little IPA constellation, butterfly or golden heart appears above the button. Each tap has a 1-in-12 chance when the 10-second surprise cooldown has elapsed. Personal totals of 50, 100 and each further 100 bring a milestone thank-you, replacing any current surprise. Only one surprise appears at a time, for about two seconds. Effects are silent, leave navigation usable and have static equivalents for reduced-motion settings. **Every tap still adds exactly one heart**; effects do not award extra hearts or quiz stars. Reloads and syncing earlier hearts do not trigger surprises.
+
+Personal contributions are saved in the browser. With the Cloudflare counter connected, rapid taps are saved in batches and retried without double-counting. Pending hearts survive a reload and sync when the service is reachable. Clearing browser storage resets the device's identity and personal count; it does not erase the community total. When storage is unavailable, hearts are kept for the current visit.
+
+The shared counter uses one free Cloudflare account owned by the site maintainer. Visitors need no accounts. The app stays on GitHub Pages; only the counter API and database run on Cloudflare. The counter is connected in the local preview and the GitHub Pages build uses its public URL from the repository's Actions variable. [Setup and maintenance](backend/likes/README.md). Technical connection messages are not shown in the widget; personal hearts continue to be saved locally.
+
 ### Local development
 
 ```sh
@@ -94,5 +104,5 @@ The preview.2 formatting migration preserves existing source-tip wording. The [c
   year = {2026},
   title = {IPA365 Flashcards},
   url = {https://congzhang365.github.io/IPA_flashcard/},
-  version = {1.1.0-preview.4}
+  version = {1.1.0-preview.9}
   ```

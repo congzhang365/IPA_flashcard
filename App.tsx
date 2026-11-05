@@ -8,6 +8,7 @@ import { FeatureIcon, featureStyles } from './components/FeatureIcon';
 import { KeyboardGroup } from './components/IPAKKeyboard';
 import { SettingsOverlay } from './components/SettingsOverlay';
 import { IPAChart } from './components/IPAChart';
+import { LikesWidget } from './components/LikesWidget';
 import { gradeQuizAnswer } from './services/quizGrading';
 import { hasBundledAudio, stopIPASound } from './services/audioService';
 import { Settings, Layers, Microscope, Music, MoveHorizontal, RotateCcw, ChevronLeft, ChevronRight, BookOpen, Sliders, Construction, Smartphone, Share, PlusSquare, Star, Check, HelpCircle, X, ExternalLink, Grid2X2 } from 'lucide-react';
@@ -722,12 +723,10 @@ const handleInstallClick = async () => {
           ) : (
             <QueueCelebration score={isCelebrationPreview ? celebrationPreviewScore : quizSessionScore} preview={isCelebrationPreview} onReset={resetAll} />
           )}
-          <IPAAppCredits />
         </main>
        ) : activeTab === 'chart' ? (
         <main className="w-full flex-grow py-4">
           <IPAChart />
-          <IPAAppCredits />
         </main>
        ) : activeTab === 'lab' ? (
         <main className="w-full flex-grow flex flex-col items-center justify-center py-8 gap-8 animate-in fade-in duration-300 px-4">
@@ -764,7 +763,6 @@ const handleInstallClick = async () => {
               Check back for version 2.0
             </p>
           </div>
-          <IPAAppCredits />
         </main>
       ) : (
         <main className="w-full flex-grow flex flex-col items-center justify-start py-6 gap-5 animate-in fade-in slide-in-from-right duration-300 overflow-y-auto pb-8 scrollbar-hide">
@@ -874,6 +872,11 @@ const handleInstallClick = async () => {
               </div>
               <p>A full-point quiz answer is removed from the deck; partial or incorrect answers return for more practice. The app keeps your three highest completed quiz scores.</p>
             </div>
+          </section>
+
+          <section className="w-full bg-white p-5 rounded-[1.75rem] border border-slate-100/80 shadow-md flex flex-col gap-2.5">
+            <h3 className="font-bold text-slate-800 text-sm">A little love for IPA</h3>
+            <p className="text-xs text-slate-600 leading-relaxed">Enjoying IPA365? Each heart releases an IPA symbol, a fun emoji and your running count, with occasional little surprises and milestone thank-yous. Every tap adds one heart. The tiny heart and number below the copyright footer show the community total.</p>
           </section>
 
           {/* Chart instructions immediately before Reset Progress */}
@@ -988,9 +991,10 @@ const handleInstallClick = async () => {
             </div>
           </div>
 
-          <IPAAppCredits />
         </main>
       )}
+
+      <LikesWidget><IPAAppCredits /></LikesWidget>
 
       <nav className="fixed bottom-0 left-0 right-0 pb-[env(safe-area-inset-bottom,20px)] pt-4 bg-slate-900/95 backdrop-blur-xl flex justify-center items-center shadow-2xl z-40 border-t border-white/10">
         <div className="flex justify-around w-full max-w-md px-3">

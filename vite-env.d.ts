@@ -2,3 +2,7 @@
 
 declare const __APP_VERSION__: string;
 declare const __BUNDLED_AUDIO_FILES__: string[];
+
+interface ImportMetaEnv {
+  readonly VITE_LIKES_API_URL?: string;
+}

@@ -2,6 +2,78 @@
 
 Report the version number with every development handoff. Keep the package, lockfile and README version consistent. The app footer shows the author/copyright line without a preview-version label. Preview versions are not published releases; do not replace the existing GitHub v1.0.0 tag.
 
+## 1.1.0-preview.9 — 5 November 2026
+
+- Expanded heart reactions to 62 emojis, using shuffled batches with no immediate repeats.
+- Added occasional IPA constellations, butterflies with heart trails and golden-heart sparkles. Random surprises have a 1-in-12 chance after a 10-second cooldown; personal milestones at 50 and each 100 take priority.
+- Keep one surprise visible for about two seconds, with silent static equivalents for reduced-motion preferences. Effects stay around the heart without changing layout or intercepting navigation.
+- Preserved personal counts and Cloudflare synchronization: every tap still contributes one heart. Reloading and syncing do not trigger surprises.
+- Updated the concise tutorial instructions and documentation. Published this preview to GitHub Pages on 5 November 2026, including the shared hearts connection and the changes from previews .5–.8. The stable v1.0.0 release tag and verified preview.8 checkpoint are retained.
+- Validation: 75 automated tests and the production build pass. Browser checks covered 320/390/768/1280px layouts, all surprise scenes, navigation, automatic expiry, actual reduced-motion styles and two keyboard taps saved to the shared counter.
+
+### Preview.9 publication checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.9-pre-publish-2026-11-05.zip`
+- Files: **172**, verified byte-for-byte before the publication notes were updated; local configuration, QA files, dependencies, experiments and recordings are excluded.
+- Archive SHA-256: `f67d452adc6873121f80b22e9e7bfe17b6490bc5441a66db3c78d5a2bb53e7b4`
+
+## 1.1.0-preview.8 — 5 November 2026
+
+- Removed the heart widget's box and permanent symbol/count badge. Centred the heart and Like IPA365? together, keeping the 44px touch target.
+- Kept the animated IPA/running-count effect and added 20 more emoji reactions, for 22 emoji choices in total.
+- Removed the visible Total hearts label. The footer keeps only its tiny heart and total at the existing size; screen-reader labels remain available.
+- Connected the local preview to the deployed Cloudflare Worker and D1 counter. Saved the public API URL as the repository's Actions variable for future builds. Verified that 172 pending hearts synced and two live taps increased the saved shared total to 174. The frontend changes are still unpublished.
+
+### Preview.8 connection checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.8-2026-11-05.zip`
+- Files: **170**, verified byte-for-byte before updating the connection documentation; local environment and account configuration files are excluded.
+- Archive SHA-256: `68cbcdd5e14d722f6f7da6d768a0a7d65061435c92c6fb0fbfb9f4e66e108ef4`
+
+### Preview.7 checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.7-2026-11-05.zip`
+- Files: **170**, verified byte-for-byte before editing.
+- Archive SHA-256: `82D32725212339814D4F9442D373290715A19A27934B9DE4929C37DFA7195C89`
+
+## 1.1.0-preview.7 — 5 November 2026
+
+- Removed the repeated-tapping instruction and visible connection messages from the heart widget.
+- Moved the community total into small text below the copyright footer. Personal hearts appear as an IPA symbol/count pair beside the button, and each floating reaction includes its own updated running count.
+- Return each committed tap's count from the existing storage lock so rapidly added hearts receive the correct individual animation numbers. Updated the existing concurrency regression check to verify these returned counts.
+
+### Preview.6 checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.6-2026-11-05.zip`
+- Files: **170**, verified byte-for-byte before editing.
+- Archive SHA-256: `6C15C5B997F945EEE484520ADC1EDE3343388230906D562B90CD8956D52C7D14`
+
+## 1.1.0-preview.6 — 5 November 2026
+
+- Reduced the heart widget to a compact white row with the cards' light slate border and typography. Kept a 44px touch target, smaller IPA reactions, and clearly labelled Total/You counts.
+- Removed the large peach panel, extra caption and divider. Connection messages use one small line; the normal connected thank-you message stays available to screen readers without taking layout space.
+- Heart storage and syncing behaviour are unchanged.
+
+### Preview.5 checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.5-2026-11-05.zip`
+- Files: **170**, verified byte-for-byte before the layout changes.
+- Archive SHA-256: `D57E1D6E2B774C69E387EB1141E4FEFA5B05D42F5AA7A4044E1A60CEAE6D0D53`
+
+## 1.1.0-preview.5 — 5 November 2026
+
+- Added an inline heart widget above the copyright footer, with unlimited repeat taps, small IPA reactions, a shared total and a device-local contribution count. Respects reduced-motion preferences and supports keyboard activation.
+- Save hearts locally before syncing; batch rapid taps and use cumulative per-browser counts so retries and stale requests do not count hearts twice. Pending hearts survive reloads, and tabs share browser storage and a Web Lock where available.
+- Added a standalone Cloudflare Worker and D1 schema in `backend/likes`, with validated requests, atomic counter updates and explicit allowed website origins. The app and all source code remain on GitHub/GitHub Pages.
+- Added account/setup instructions, a public API URL build variable, and frontend/API/SQLite regression checks. The shared counter requires the owner's free Cloudflare account and is not yet connected or deployed.
+- Study content, grading, audio filenames and saved learning progress are unchanged.
+
+### Published preview.4 checkpoint
+
+- Archive: `.backups/IPA365-v1.1.0-preview.4-published-2026-11-05.zip`
+- Exact Git archive of published commit `08289f871dcecadd29cd64a78b6913eb52691dd2` before this change.
+- Archive SHA-256: `8DFA5E8D7D43C138B0D3FD4DF9A3C88587203A0BB77ABA4CA729F219BD4F94CF`
+
 ## 1.1.0-preview.4 — 31 October 2026
 
 - Removed the visible chart-layout credit paragraph and preview-version footer line. The author/copyright footer remains; source and licence attribution are retained in the README and source metadata.

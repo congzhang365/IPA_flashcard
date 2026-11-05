@@ -1,0 +1,14 @@
+{
+  "name": "ipa365-likes",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-05",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGINS": "https://congzhang365.github.io"
+  },
+  "d1_databases": [{
+    "binding": "LIKES_DB",
+    "database_name": "ipa365-hearts",
+    "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+  }]
+}

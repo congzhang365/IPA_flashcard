@@ -1,5 +1,5 @@
 /*
- * Dependency-free regression suite for IPA365 v1.1.0-preview.4.
+ * Dependency-free regression suite for IPA365 v1.1.0-preview.9.
  * Run with `npm test` (Node 20+). No build, DOM, network, or file writes.
  * Rendering checks use real React SSR; they do not claim to test browser layout,
  * font shaping, pointer interactions, or pronunciation quality by ear.
@@ -16,7 +16,7 @@ const React = require('react');
 const { renderToStaticMarkup } = require('react-dom/server');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '1.1.0-preview.4';
+const VERSION = '1.1.0-preview.9';
 const AUDIO_DIR = path.join(ROOT, 'public', 'audio');
 const audioFilenames = fs.readdirSync(AUDIO_DIR)
   .filter(name => name.toLowerCase().endsWith('.mp3')).sort();
@@ -771,6 +771,331 @@ describe('Callout placement leaves the chart and navigation usable', () => {
       { left: 100, top: 80, width: 320, height: 500, bottomLimit: 520 }, 250);
     assert.ok(result.left >= 112 && result.left + result.width <= 408);
     assert.ok(result.top >= 92 && result.top + Math.min(250, result.maxHeight) <= 508);
+  });
+});
+
+describe('Hearts: local persistence and reliable synchronisation', () => {
+  const { LikesClient, LIKES_STORAGE_KEY, normalizeLikesApiUrl } = makeLoader({ globals: { AbortController } })('services/likesService.ts');
+  const id = '00000000-0000-4000-8000-000000000001';
+  const otherId = '00000000-0000-4000-8000-000000000002';
+  const reply = (total, mine) => ({ ok: true, headers: { get: () => null }, json: async () => ({ total, mine }) });
+  function memory() {
+    const values = new Map([['learned_map', '{"C001":"yes"}']]);
+    return { values, getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
+  }
+  function client(t, options = {}) {
+    const storage = options.storage ?? memory();
+    const instance = new LikesClient({ storage, idFactory: () => id, ...options });
+    t.after(() => instance.stop());
+    return { instance, storage };
+  }
+  const tap = (instance, times) => Promise.all(Array.from({ length: times }, () => instance.addHeart()));
+
+  test('repeat taps persist across reloads without touching learning progress or inventing a shared total', async t => {
+    const { instance, storage } = client(t);
+    await tap(instance, 80);
+    assert.equal(instance.getSnapshot().mine, 80);
+    assert.equal(instance.getSnapshot().shared, null);
+    assert.equal(instance.getSnapshot().status, 'local');
+    assert.equal(storage.getItem('learned_map'), '{"C001":"yes"}');
+    assert.equal(client(t, { storage }).instance.getSnapshot().mine, 80);
+  });
+
+  test('two tabs coordinate rapid clicks using the supplied browser lock', async t => {
+    const storage = memory();
+    let queue = Promise.resolve();
+    let locks = 0;
+    const withLock = task => { locks++; queue = queue.then(task); return queue; };
+    const a = client(t, { storage, withLock }).instance;
+    const b = client(t, { storage, withLock }).instance;
+    const contributions = await Promise.all([tap(a, 50), tap(b, 50)]);
+    a.reloadFromStorage(); b.reloadFromStorage();
+    assert.equal(a.getSnapshot().mine, 100);
+    assert.equal(b.getSnapshot().mine, 100);
+    assert.equal(locks, 100);
+    assert.deepEqual(contributions.flat().sort((x, y) => x - y), Array.from({ length: 100 }, (_, index) => index + 1));
+  });
+
+  test('a lost response leaves hearts queued and a retry sends the same cumulative count', async t => {
+    let serverMine = 0;
+    let loseResponse = true;
+    const received = [];
+    const fetcher = async (_url, options) => {
+      const body = JSON.parse(options.body);
+      received.push(body.count);
+      serverMine = Math.max(serverMine, body.count);
+      if (loseResponse) { loseResponse = false; throw new Error('Connection lost after save'); }
+      return reply(10 + serverMine, serverMine);
+    };
+    const { instance, storage } = client(t, { apiUrl: 'https://hearts.example', fetcher });
+    await tap(instance, 5);
+    await instance.syncNow();
+    assert.equal(instance.getSnapshot().pending, 5);
+    assert.equal(instance.getSnapshot().status, 'offline');
+    instance.stop();
+    const reloaded = client(t, { storage, apiUrl: 'https://hearts.example', fetcher }).instance;
+    await reloaded.syncNow();
+    assert.deepEqual(received, [5, 5]);
+    assert.equal(serverMine, 5);
+    assert.equal(reloaded.getSnapshot().mine, 5);
+    assert.equal(reloaded.getSnapshot().shared, 15);
+    assert.equal(reloaded.getSnapshot().pending, 0);
+  });
+
+  test('large contributions are fully saved in bounded batches, not capped at 250', async t => {
+    const received = [];
+    const fetcher = async (_url, options) => {
+      const count = JSON.parse(options.body).count;
+      received.push(count);
+      return reply(count + 7, count);
+    };
+    const { instance } = client(t, { apiUrl: 'https://hearts.example', fetcher });
+    await tap(instance, 601);
+    await instance.syncNow(); await instance.syncNow(); await instance.syncNow();
+    assert.deepEqual(received, [250, 500, 601]);
+    assert.equal(instance.getSnapshot().shared, 608);
+    assert.equal(instance.getSnapshot().mine, 601);
+    assert.equal(instance.getSnapshot().pending, 0);
+  });
+
+  test('an older read arriving after a save cannot lower either count or restore pending hearts', async t => {
+    let finishRead;
+    const fetcher = async (_url, options) => options.method === 'POST'
+      ? reply(12, 2) : new Promise(resolve => { finishRead = resolve; });
+    const { instance } = client(t, { apiUrl: 'https://hearts.example', fetcher });
+    await tap(instance, 2);
+    const reading = instance.refresh();
+    await instance.syncNow();
+    finishRead(reply(10, 0));
+    await reading;
+    assert.equal(instance.getSnapshot().shared, 12);
+    assert.equal(instance.getSnapshot().mine, 2);
+    assert.equal(instance.getSnapshot().pending, 0);
+  });
+
+  test('clearing site data during a save does not restore the old device identity or personal count', async t => {
+    let finish;
+    let sequence = 0;
+    const { instance, storage } = client(t, {
+      apiUrl: 'https://hearts.example', idFactory: () => sequence++ === 0 ? id : otherId,
+      fetcher: async () => new Promise(resolve => { finish = resolve; }),
+    });
+    await tap(instance, 3);
+    const saving = instance.syncNow();
+    storage.values.delete(LIKES_STORAGE_KEY);
+    instance.reloadFromStorage();
+    finish(reply(3, 3)); await saving;
+    assert.equal(instance.getSnapshot().mine, 0);
+    assert.equal(JSON.parse(storage.getItem(LIKES_STORAGE_KEY)).id, otherId);
+  });
+
+  test('blocked storage and damaged JSON cannot break tapping', async t => {
+    const blocked = client(t, { storage: { getItem: () => { throw new Error('Denied'); }, setItem: () => { throw new Error('Denied'); } } }).instance;
+    await tap(blocked, 3);
+    assert.equal(blocked.getSnapshot().mine, 3);
+    assert.equal(blocked.getSnapshot().persistent, false);
+    const storage = memory(); storage.setItem(LIKES_STORAGE_KEY, '{invalid');
+    const repaired = client(t, { storage }).instance;
+    await repaired.addHeart();
+    assert.equal(repaired.getSnapshot().mine, 1);
+    assert.equal(repaired.getSnapshot().persistent, true);
+    assert.equal(JSON.parse(storage.getItem(LIKES_STORAGE_KEY)).mine, 1);
+  });
+
+  test('write-denied storage keeps subsequent hearts in memory instead of rereading stale values', async t => {
+    const { instance } = client(t, { storage: { getItem: () => null, setItem: () => { throw new Error('Full'); } } });
+    await tap(instance, 5);
+    assert.equal(instance.getSnapshot().mine, 5);
+    assert.equal(instance.getSnapshot().persistent, false);
+  });
+
+  test('invalid server replies do not acknowledge queued hearts', async t => {
+    const { instance } = client(t, { apiUrl: 'https://hearts.example', fetcher: async () => reply(1, 20) });
+    await tap(instance, 2); await instance.syncNow();
+    assert.equal(instance.getSnapshot().pending, 2);
+    assert.equal(instance.getSnapshot().shared, null);
+    assert.equal(instance.getSnapshot().status, 'offline');
+  });
+
+  test('server retry delays replace an already queued burst timer', async t => {
+    const timers = new Map();
+    let sequence = 0;
+    const { LikesClient: TimedClient } = makeLoader({ globals: {
+      AbortController,
+      setTimeout: (callback, delay) => { const handle = ++sequence; timers.set(handle, { callback, delay }); return handle; },
+      clearTimeout: handle => timers.delete(handle),
+    } })('services/likesService.ts');
+    const instance = new TimedClient({
+      apiUrl: 'https://hearts.example', storage: memory(), idFactory: () => id,
+      fetcher: async () => ({ ok: false, headers: { get: () => '60' } }),
+    });
+    t.after(() => instance.stop());
+    await instance.addHeart();
+    assert.deepEqual([...timers.values()].map(timer => timer.delay), [750]);
+    await instance.syncNow();
+    assert.deepEqual([...timers.values()].map(timer => timer.delay), [60000]);
+    assert.equal(instance.getSnapshot().pending, 1);
+  });
+
+  test('configuration accepts HTTPS and local development URLs without credentials or query strings', () => {
+    assert.equal(normalizeLikesApiUrl('https://counter.example/'), 'https://counter.example');
+    assert.equal(normalizeLikesApiUrl('http://127.0.0.1:8787'), 'http://127.0.0.1:8787');
+    for (const value of ['', 'javascript:alert(1)', 'http://public.example', 'https://name:secret@example.com', 'https://example.com/?token=x', 'https://example.com/path']) {
+      assert.equal(normalizeLikesApiUrl(value), '', value);
+    }
+  });
+
+  test('widget SSR has an accessible repeatable heart button and an honest unknown community count', () => {
+    const { LikesWidget } = load('components/LikesWidget.tsx');
+    const html = render(LikesWidget, {});
+    assert.match(html, /aria-label="Give IPA365 a heart"/);
+    assert.match(html, /role="status"/);
+    assert.doesNotMatch(html, /Tap as often|Saved here|shared counter not connected/i);
+    assert.match(html, /data-heart-count="shared"[^>]*>—/);
+    assert.match(html, /data-heart-count="mine">0/);
+    assert.doesNotMatch(html, /role="dialog"/);
+  });
+});
+
+describe('Heart reactions and surprise timing', () => {
+  const { HeartReactionPicker, EMOJI_REACTIONS, HEART_SURPRISE_MS } = load('services/heartReactions.ts');
+
+  test('62 unique emojis include all 40 additions and exhaust each shuffled bag without consecutive repeats', () => {
+    const additions = '🐱 🐶 🐰 🐼 🦊 🐨 🐸 🐥 🐧 🦉 🐝 🐞 🐢 🐬 🐳 🦄 🐙 🦭 🦦 🦔 🌸 🌼 🌻 🌺 🌷 🍀 🌿 🍒 🍓 🍉 🚀 🪐 🌙 ☀️ 🌞 🌠 🫶 💝 🎈 🎊'.split(' ');
+    assert.equal(EMOJI_REACTIONS.length, 62);
+    assert.equal(new Set(EMOJI_REACTIONS).size, 62);
+    for (const emoji of additions) assert.ok(EMOJI_REACTIONS.includes(emoji), emoji);
+    for (const [caseIndex, random] of [() => 0, () => .999999, (() => {
+      let seed = 42;
+      return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 2 ** 32; };
+    })()].entries()) {
+      const picker = new HeartReactionPicker(random);
+      let previous;
+      const batches = [];
+      for (let batch = 0; batch < 10; batch++) {
+        const emojis = Array.from({ length: 62 }, (_, index) => {
+          const emoji = picker.next(batch * 62 + index + 1, 0).emoji;
+          assert.notEqual(emoji, previous);
+          previous = emoji;
+          return emoji;
+        });
+        assert.deepEqual([...emojis].sort(), [...EMOJI_REACTIONS].sort());
+        batches.push(emojis.join(' '));
+      }
+      if (caseIndex === 2) assert.ok(new Set(batches).size > 1);
+    }
+  });
+
+  test('random surprise probability is one in twelve, with no chance draws during cooldown', () => {
+    let draws = [];
+    const picker = new HeartReactionPicker(() => draws.shift() ?? .5);
+    assert.equal(picker.next(1, 0).surprise, undefined); // Prime the shuffled bag.
+    draws = [1 / 12, 0];
+    assert.equal(picker.next(2, 0).surprise, undefined); // Boundary is excluded.
+    draws = [1 / 12 - .000001, 0];
+    assert.equal(picker.next(3, 100).surprise.kind, 'constellation');
+    draws = [0, .5];
+    assert.equal(picker.next(4, 10_099).surprise, undefined);
+    assert.equal(draws.length, 2);
+    assert.equal(picker.next(5, 10_100).surprise.kind, 'butterfly');
+    draws = [0, .999999];
+    assert.equal(picker.next(6, 20_100).surprise.kind, 'golden');
+  });
+
+  test('future milestones override cooldown, while old or repeated counts never replay them', () => {
+    const picker = new HeartReactionPicker(() => 0);
+    assert.equal(picker.next(49, 0).surprise.kind, 'constellation');
+    assert.deepEqual(plain(picker.next(50, 1).surprise), { kind: 'milestone', count: 50 });
+    assert.equal(picker.next(50, 20_000).surprise, undefined);
+    assert.equal(picker.next(49, 20_001).surprise, undefined);
+    assert.equal(picker.next(51, 9999).surprise, undefined);
+    assert.equal(picker.next(100, 10_000).surprise.kind, 'milestone');
+    assert.equal(picker.next(101, 19_999).surprise, undefined);
+    assert.equal(picker.next(200, 20_000).surprise.kind, 'milestone');
+    const reopened = new HeartReactionPicker(() => .5);
+    assert.equal(reopened.next(201, 0).surprise, undefined);
+    assert.equal(HEART_SURPRISE_MS, 2000);
+  });
+
+  test('all four surprise scenes render as decorative content without controls or dialogs', () => {
+    const { HeartSurprise } = load('components/HeartSurprise.tsx');
+    for (const kind of ['constellation', 'butterfly', 'golden', 'milestone']) {
+      const html = render(HeartSurprise, { surprise: { kind, count: 200 } });
+      assert.match(html, new RegExp(`likes-widget__surprise--${kind}`));
+      assert.match(html, /aria-hidden="true"/);
+      assert.doesNotMatch(html, /<button|role="dialog"|<audio/);
+      if (kind === 'milestone') assert.match(html, /200 hearts from you!/);
+      if (kind === 'constellation') assert.match(html, /ipa-font/);
+    }
+  });
+
+  test('rapid real taps keep exact counts, replace/expire surprises, and clear timers and listeners on unmount', async () => {
+    const { LikesClient, LIKES_STORAGE_KEY } = makeLoader({ globals: { AbortController } })('services/likesService.ts');
+    const values = new Map([[LIKES_STORAGE_KEY, JSON.stringify({ version: 1,
+      id: '00000000-0000-4000-8000-000000000001', mine: 49, confirmed: 0, shared: null })]]);
+    const client = new LikesClient({ storage: { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) } });
+    const scheduled = new Map();
+    const listeners = new Set();
+    let clock = 0, timerId = 0, cursor = 0, firstRender = true, tree;
+    const slots = [], effects = [], cleanups = [];
+    const events = { addEventListener: (_name, fn) => listeners.add(fn), removeEventListener: (_name, fn) => listeners.delete(fn) };
+    const hooks = {
+      ...React,
+      useState(initial) {
+        const slot = cursor++;
+        if (firstRender) slots[slot] = typeof initial === 'function' ? initial() : initial;
+        return [slots[slot], update => { slots[slot] = typeof update === 'function' ? update(slots[slot]) : update; rerender(); }];
+      },
+      useRef(initial) { const slot = cursor++; if (firstRender) slots[slot] = { current: initial }; return slots[slot]; },
+      useEffect(effect) { cursor++; if (firstRender) effects.push(effect); },
+    };
+    const localLoad = makeLoader({ globals: { window: events, document: { ...events, visibilityState: 'visible' },
+      performance: { now: () => clock },
+      setTimeout: (callback, delay) => { const id = ++timerId; scheduled.set(id, { callback, at: clock + delay }); return id; },
+      clearTimeout: id => scheduled.delete(id),
+    }, externals: { react: hooks, '../services/likesService': { createBrowserLikesClient: () => client, LIKES_STORAGE_KEY } } });
+    const { LikesWidget } = localLoad('components/LikesWidget.tsx');
+    function rerender() { cursor = 0; tree = LikesWidget({}); firstRender = false; }
+    function elements(value) {
+      if (Array.isArray(value)) return value.flatMap(elements);
+      return React.isValidElement(value) ? [value, ...elements(value.props.children)] : [];
+    }
+    function advance(milliseconds) {
+      clock += milliseconds;
+      for (const [id, task] of [...scheduled]) if (task.at <= clock) { scheduled.delete(id); task.callback(); }
+    }
+    async function taps(times) {
+      const button = elements(tree).find(element => element.type === 'button');
+      for (let index = 0; index < times; index++) button.props.onClick();
+      for (let turn = 0; turn < 12; turn++) await Promise.resolve();
+    }
+    const scene = () => elements(tree).find(element => typeof element.type === 'function' && element.props.surprise)?.props.surprise;
+    rerender();
+    for (const effect of effects) cleanups.push(effect());
+    assert.equal(scene(), undefined); // Stored hearts do not trigger a celebration.
+    await taps(1);
+    assert.equal(client.getSnapshot().mine, 50);
+    assert.equal(scene().kind, 'milestone');
+    advance(1999);
+    assert.equal(scene().count, 50);
+    await taps(50);
+    assert.equal(client.getSnapshot().mine, 100);
+    assert.equal(scene().count, 100); // New milestone replaces the old timer.
+    advance(1);
+    assert.equal(scene().count, 100);
+    advance(1999);
+    assert.equal(scene(), undefined);
+    await taps(100);
+    assert.equal(client.getSnapshot().mine, 200);
+    assert.equal(scene().count, 200);
+    const reactions = elements(tree).filter(element => element.props.className === 'likes-widget__reaction-count');
+    assert.deepEqual(reactions.map(element => element.props.children.join('').replace(/\D/g, '')), Array.from({ length: 10 }, (_, index) => String(191 + index)));
+    assert.ok(scheduled.size > 0);
+    for (const cleanup of cleanups) cleanup();
+    client.stop();
+    assert.equal(scheduled.size, 0);
+    assert.equal(listeners.size, 0);
+    assert.equal(JSON.parse(values.get(LIKES_STORAGE_KEY)).mine, 200);
   });
 });
 

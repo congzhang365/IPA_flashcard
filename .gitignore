@@ -5,3 +5,8 @@ dist/
 .DS_Store
 .backups/
 .qa/
+.env
+.env.*
+.wrangler/
+.dev.vars*
+backend/likes/wrangler.jsonc
