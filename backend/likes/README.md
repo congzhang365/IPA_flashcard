@@ -6,7 +6,7 @@ Visitors do not sign in. No per-click history, names, emails or device fingerpri
 are collected by this code. A random identifier saved in the browser lets retries
 be recognised. Cloudflare may process normal request metadata under its policies.
 
-The current app version is **1.1.0-preview.9**. The Cloudflare counter is live at
+The current app version is **1.1.0-preview.10**. The Cloudflare counter is live at
 `https://ipa365-likes.rolin365.workers.dev`, backed by the `ipa365-hearts` D1
 database and the `LIKES_DB` Worker binding. The local preview is connected, and
 the repository's `VITE_LIKES_API_URL` Actions variable contains the public URL.

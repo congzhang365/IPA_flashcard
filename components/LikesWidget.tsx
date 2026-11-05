@@ -3,6 +3,7 @@ import { Heart } from 'lucide-react';
 import { createBrowserLikesClient, LIKES_STORAGE_KEY } from '../services/likesService';
 import { HEART_SURPRISE_MS, HeartReactionPicker, IPA_REACTIONS, type HeartSurprise as Surprise } from '../services/heartReactions';
 import { HeartSurprise } from './HeartSurprise';
+import { trackHeartClick } from '../services/analytics';
 import './LikesWidget.css';
 
 const number = (value: number) => value.toLocaleString('en-GB');
@@ -47,6 +48,7 @@ export const LikesWidget: React.FC<{ children?: React.ReactNode }> = ({ children
   }, [client]);
 
   const giveHeart = () => {
+    trackHeartClick();
     const id = sequence.current++;
     void client.addHeart().then(count => {
       if (!mounted.current) return;

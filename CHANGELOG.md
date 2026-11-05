@@ -2,6 +2,19 @@
 
 Report the version number with every development handoff. Keep the package, lockfile and README version consistent. The app footer shows the author/copyright line without a preview-version label. Preview versions are not published releases; do not replace the existing GitHub v1.0.0 tag.
 
+## 1.1.0-preview.10 — 5 November 2026
+
+- Added one `heart_click` event per heart tap to the existing Google Analytics stream, enabling country/city reporting without sending Cloudflare browser IDs or personal heart totals.
+- Keep reporting out of development and other hosts. Missing or blocked Analytics does not affect the shared counter or reactions; syncing/retries/reloads do not emit heart events.
+- Added instructions for a saved IPA365 hearts by location exploration. Cloudflare data and existing Google tag settings are unchanged.
+- Published the event tracking to GitHub Pages on 5 November 2026. All 78 automated tests and the production build pass; the destination measurement ID matches the IPA Flashcard property's active web stream.
+
+### Published preview.9 checkpoint
+
+- Exact Git archive: `.backups/IPA365-v1.1.0-preview.9-published-2026-11-05.zip`
+- Published commit: `77968f98aeb5a176dd09b793ed18c39e6a7e8b0a`
+- Archive SHA-256: `9AD7CC7B9D8CC1EC9A6E9BF185CA7E728C6E85906BDBBB38D3F3F146B63698FD`
+
 ## 1.1.0-preview.9 — 5 November 2026
 
 - Expanded heart reactions to 62 emojis, using shuffled batches with no immediate repeats.

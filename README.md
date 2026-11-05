@@ -1,6 +1,6 @@
 # IPA365 Flashcards
 
-Current local and published version: **v1.1.0-preview.9**. Planned stable release: **v1.1.0**. See [version history and rollback](CHANGELOG.md).
+Current local and published version: **v1.1.0-preview.10**. Planned stable release: **v1.1.0**. See [version history and rollback](CHANGELOG.md).
 
 Master the International Phonetic Alphabet with this free, interactive flashcard tool. Practice consonants, vowels, and diacritics with an efficient study mode.
 
@@ -62,6 +62,38 @@ Personal contributions are saved in the browser. With the Cloudflare counter con
 
 The shared counter uses one free Cloudflare account owned by the site maintainer. Visitors need no accounts. The app stays on GitHub Pages; only the counter API and database run on Cloudflare. The counter is connected in the local preview and the GitHub Pages build uses its public URL from the repository's Actions variable. [Setup and maintenance](backend/likes/README.md). Technical connection messages are not shown in the widget; personal hearts continue to be saved locally.
 
+### Heart locations in Google Analytics
+
+The published app sends one **`heart_click`** event per heart tap to the existing
+GA4 web stream **`G-J1RX1HY0G9`**. Google Analytics supplies its normal approximate
+country/city dimensions; the app does not send the Cloudflare browser ID,
+personal heart totals, names or manually collected location data. The new heart
+event is disabled in development and on hosts other than `congzhang365.github.io`.
+The existing Google tag and its settings are unchanged.
+
+To save a geographic report in Google Analytics:
+
+1. Open **Explore → Blank** and name it **IPA365 hearts by location**.
+2. Import dimensions **Country**, **City** (sometimes labelled **Town/City**),
+   **Event name** and **Hostname**; import metrics **Event count** and **Total users**.
+3. Put **Country** and **City** in Rows, and both metrics in Values.
+4. Add filters: **Event name exactly matches `heart_click`** and
+   **Hostname exactly matches `congzhang365.github.io`**.
+5. Choose the date range. The exploration is saved in your Analytics account.
+
+Use **Realtime → Event count by Event name** to check new `heart_click` events.
+Processed reports can take 24–48 hours to populate. Event count measures taps;
+Total users measures Analytics users who triggered the filtered event, not
+verified individual people. City can be approximate or unavailable.
+
+Only future taps are measured; syncing, retries, reloads and previous hearts do
+not send events. Analytics blocking or collection settings can make GA4 counts
+differ from the shared total. Cloudflare remains the source for the saved heart
+counter, and missing Analytics never prevents saving or animating a heart.
+
+References: [Google tag events](https://developers.google.com/analytics/devguides/collection/ga4/events),
+[geographic dimensions](https://support.google.com/analytics/table/13948007?hl=en).
+
 ### Local development
 
 ```sh
@@ -104,5 +136,5 @@ The preview.2 formatting migration preserves existing source-tip wording. The [c
   year = {2026},
   title = {IPA365 Flashcards},
   url = {https://congzhang365.github.io/IPA_flashcard/},
-  version = {1.1.0-preview.9}
+  version = {1.1.0-preview.10}
   ```

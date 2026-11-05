@@ -1,5 +1,5 @@
 /*
- * Dependency-free regression suite for IPA365 v1.1.0-preview.9.
+ * Dependency-free regression suite for IPA365 v1.1.0-preview.10.
  * Run with `npm test` (Node 20+). No build, DOM, network, or file writes.
  * Rendering checks use real React SSR; they do not claim to test browser layout,
  * font shaping, pointer interactions, or pronunciation quality by ear.
@@ -16,7 +16,7 @@ const React = require('react');
 const { renderToStaticMarkup } = require('react-dom/server');
 
 const ROOT = path.resolve(__dirname, '..');
-const VERSION = '1.1.0-preview.9';
+const VERSION = '1.1.0-preview.10';
 const AUDIO_DIR = path.join(ROOT, 'public', 'audio');
 const audioFilenames = fs.readdirSync(AUDIO_DIR)
   .filter(name => name.toLowerCase().endsWith('.mp3')).sort();
@@ -27,7 +27,8 @@ const sequence = (prefix, first, last) => Array.from(
 );
 
 /** An isolated CommonJS loader: TS/TSX stay in memory and CSS is a no-op. */
-function makeLoader({ globals = {}, externals = {}, logger = console } = {}) {
+function makeLoader({ globals = {}, externals = {}, logger = console,
+  env = { BASE_URL: './', DEV: false, PROD: true, MODE: 'production' } } = {}) {
   const modules = new Map();
   const context = vm.createContext({
     console: logger, Buffer, URL, URLSearchParams,
@@ -50,7 +51,7 @@ function makeLoader({ globals = {}, externals = {}, logger = console } = {}) {
     const module = { exports: {} };
     modules.set(filename, module);
     const source = fs.readFileSync(filename, 'utf8')
-      .replace(/\bimport\.meta\.env\b/g, '({ BASE_URL: "./", DEV: false, PROD: true, MODE: "production" })')
+      .replace(/\bimport\.meta\.env\b/g, `(${JSON.stringify(env)})`)
       .replace(/\bimport\.meta\.url\b/g, JSON.stringify(pathToFileURL(filename).href));
     const result = ts.transpileModule(source, {
       fileName: filename,
@@ -1036,6 +1037,7 @@ describe('Heart reactions and surprise timing', () => {
     const client = new LikesClient({ storage: { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) } });
     const scheduled = new Map();
     const listeners = new Set();
+    const analyticsEvents = [];
     let clock = 0, timerId = 0, cursor = 0, firstRender = true, tree;
     const slots = [], effects = [], cleanups = [];
     const events = { addEventListener: (_name, fn) => listeners.add(fn), removeEventListener: (_name, fn) => listeners.delete(fn) };
@@ -1049,7 +1051,8 @@ describe('Heart reactions and surprise timing', () => {
       useRef(initial) { const slot = cursor++; if (firstRender) slots[slot] = { current: initial }; return slots[slot]; },
       useEffect(effect) { cursor++; if (firstRender) effects.push(effect); },
     };
-    const localLoad = makeLoader({ globals: { window: events, document: { ...events, visibilityState: 'visible' },
+    const localLoad = makeLoader({ globals: { window: { ...events, location: { hostname: 'congzhang365.github.io' },
+      gtag: (...args) => analyticsEvents.push(plain(args)) }, document: { ...events, visibilityState: 'visible' },
       performance: { now: () => clock },
       setTimeout: (callback, delay) => { const id = ++timerId; scheduled.set(id, { callback, at: clock + delay }); return id; },
       clearTimeout: id => scheduled.delete(id),
@@ -1073,8 +1076,10 @@ describe('Heart reactions and surprise timing', () => {
     rerender();
     for (const effect of effects) cleanups.push(effect());
     assert.equal(scene(), undefined); // Stored hearts do not trigger a celebration.
+    assert.equal(analyticsEvents.length, 0);
     await taps(1);
     assert.equal(client.getSnapshot().mine, 50);
+    assert.equal(analyticsEvents.length, 1);
     assert.equal(scene().kind, 'milestone');
     advance(1999);
     assert.equal(scene().count, 50);
@@ -1088,6 +1093,11 @@ describe('Heart reactions and surprise timing', () => {
     await taps(100);
     assert.equal(client.getSnapshot().mine, 200);
     assert.equal(scene().count, 200);
+    assert.equal(analyticsEvents.length, 151); // One event for each real tap, not each render.
+    client.reloadFromStorage();
+    await client.refresh();
+    assert.equal(analyticsEvents.length, 151); // Reads/syncs do not replay historical hearts.
+    for (const event of analyticsEvents) assert.deepEqual(event, ['event', 'heart_click', { send_to: 'G-J1RX1HY0G9' }]);
     const reactions = elements(tree).filter(element => element.props.className === 'likes-widget__reaction-count');
     assert.deepEqual(reactions.map(element => element.props.children.join('').replace(/\D/g, '')), Array.from({ length: 10 }, (_, index) => String(191 + index)));
     assert.ok(scheduled.size > 0);
@@ -1096,6 +1106,34 @@ describe('Heart reactions and surprise timing', () => {
     assert.equal(scheduled.size, 0);
     assert.equal(listeners.size, 0);
     assert.equal(JSON.parse(values.get(LIKES_STORAGE_KEY)).mine, 200);
+  });
+});
+
+describe('Google Analytics heart events', () => {
+  test('uses the existing stream and sends only the heart event and its destination', () => {
+    const sent = [];
+    const analytics = makeLoader({ globals: { window: { location: { hostname: 'congzhang365.github.io' }, gtag: (...args) => sent.push(plain(args)) } } })('services/analytics.ts');
+    assert.ok(readSource('index.html').includes(`gtag('config', '${analytics.GOOGLE_ANALYTICS_ID}')`));
+    analytics.trackHeartClick(); analytics.trackHeartClick();
+    assert.deepEqual(sent, Array.from({ length: 2 }, () => ['event', 'heart_click', { send_to: 'G-J1RX1HY0G9' }]));
+  });
+
+  test('does not report development, local preview hosts, other hosts or server rendering', () => {
+    const sent = [];
+    const gtag = (...args) => sent.push(args);
+    for (const hostname of ['localhost', '127.0.0.1', '[::1]', '192.168.1.2', 'example.com']) {
+      makeLoader({ globals: { window: { location: { hostname }, gtag } } })('services/analytics.ts').trackHeartClick();
+    }
+    makeLoader({ env: { DEV: true, PROD: false }, globals: { window: { location: { hostname: 'congzhang365.github.io' }, gtag } } })('services/analytics.ts').trackHeartClick();
+    assert.doesNotThrow(() => load('services/analytics.ts').trackHeartClick());
+    assert.equal(sent.length, 0);
+  });
+
+  test('missing, blocked or throwing Google tags never interrupt a heart handler', () => {
+    for (const gtag of [undefined, 'blocked', () => { throw new Error('Analytics unavailable'); }]) {
+      const { trackHeartClick } = makeLoader({ globals: { window: { location: { hostname: 'congzhang365.github.io' }, gtag } } })('services/analytics.ts');
+      assert.doesNotThrow(trackHeartClick);
+    }
   });
 });
 
